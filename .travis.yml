@@ -1,0 +1,12 @@
+language: node_js
+
+node_js:
+  - 10
+
+install:
+  - npm install typescript
+
+script:
+  - npm run lint
+  - npm run build
+  - npm test
