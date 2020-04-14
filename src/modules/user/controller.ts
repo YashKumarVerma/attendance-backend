@@ -53,7 +53,7 @@ class UserOperations {
 
   static delete(req: Request) {
     return new Promise<SuccessResponse>((resolve, reject) => {
-      if (!req.body.username) {
+      if (!req.params.username) {
         reject({
           error: true,
           message: 'username required to remove user',
@@ -61,7 +61,7 @@ class UserOperations {
         })
       }
 
-      const username = req.body.username
+      const username = req.params.username
       try {
         UserSchema.deleteOne({ username: username })
           .then((resp) => {
@@ -98,7 +98,7 @@ class UserOperations {
 
   static getUser(req: Request) {
     return new Promise<SuccessResponse>((resolve, reject) => {
-      if (!req.body.username) {
+      if (!req.params.username) {
         reject({
           error: true,
           message: 'username required to return details',
@@ -106,7 +106,7 @@ class UserOperations {
         })
       }
 
-      UserSchema.findOne({ username: req.body.username })
+      UserSchema.findOne({ username: req.params.username })
         .then((user) => {
           if (!user) {
             reject({
@@ -145,11 +145,11 @@ class UserOperations {
 
       UserSchema.findByIdAndUpdate(req.body.user._id, { $set: req.body.user })
         .exec()
-        .then((resp) => {
+        .then(() => {
           resolve({
             error: false,
             message: 'user update successful',
-            payload: resp,
+            payload: {},
           })
         })
         .catch((err) => {
