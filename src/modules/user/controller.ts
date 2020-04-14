@@ -1,37 +1,42 @@
+import { SuccessResponse, ErrorResponse } from './interface'
+
 class UserOperations {
-  static add(req: Express.Request) {
-    return new Promise((resolve: any, reject: any) => {
+  static add(req: any) {
+    return new Promise<SuccessResponse>((resolve, reject) => {
       resolve({
         message: 'some fancy resolve message',
         error: false,
-        payload: null,
+        payload: 'some data',
       })
     })
   }
+
   static delete(req: Express.Request) {
-    return new Promise((resolve: any, reject: any) => {
+    return new Promise<SuccessResponse>((resolve, reject) => {
       resolve({
         message: 'some fancy resolve message',
         error: false,
-        payload: null,
+        payload: 'some data',
       })
     })
   }
+
   static getUser(req: Express.Request) {
-    return new Promise((resolve: any, reject: any) => {
+    return new Promise<SuccessResponse>((resolve, reject) => {
       resolve({
         message: 'some fancy resolve message',
         error: false,
-        payload: null,
+        payload: 'some data',
       })
     })
   }
+
   static update(req: Express.Request) {
-    return new Promise((resolve: any, reject: any) => {
+    return new Promise<SuccessResponse>((resolve, reject) => {
       resolve({
         message: 'some fancy resolve message',
         error: false,
-        payload: null,
+        payload: 'some data',
       })
     })
   }
