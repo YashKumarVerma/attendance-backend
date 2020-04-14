@@ -1,11 +1,15 @@
-## TypeScript Starter Template
+# Attendance Application : Backend
 
 [![Build Status](https://travis-ci.com/introdevs/typescript-template.svg?branch=master)](https://travis-ci.com/introdevs/typescript-template)
 
-A handy boiler plate to set up the following with respective integrations
+## Building and Running
 
-- [x] typescript
-- [x] eslint
-- [x] prettier
-- [x] mocha
-- [x] chat
+```
+$ npm install
+$ npm run build
+$ npm run server
+```
+
+## Docs
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/10043948/Szf26B2x)
