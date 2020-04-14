@@ -3,7 +3,7 @@ require('dotenv').config()
 
 // load mongoose wrapper
 import mongoose from 'mongoose'
-import { logger } from '../logger/winston'
+import logger from '../logger/winston'
 // define an instance of database
 
 class Database {

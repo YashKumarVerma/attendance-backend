@@ -50,4 +50,4 @@ if (process.env.NODE_ENV !== 'production') {
   )
 }
 
-export { winstonLogger as logger }
+export default winstonLogger

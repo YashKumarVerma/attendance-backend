@@ -1,6 +1,6 @@
 import express from 'express'
 import { Request, Response } from 'express'
-import { logger } from '../logger/winston'
+import logger from '../logger/winston'
 import UserOperations from './controller'
 import { SuccessResponse, ErrorResponse } from './interface'
 
@@ -9,10 +9,10 @@ const router = express.Router()
 router.post('/create', (req: Request, res: Response): void => {
   UserOperations.add(req)
     .then((resp: SuccessResponse) => {
-      res.json(resp)
+      res.status(200).json(resp)
     })
     .catch((error) => {
-      res.json(error)
+      res.status(400).json(error)
     })
 })
 

@@ -4,7 +4,7 @@ require('dotenv').config()
 import express from 'express'
 
 // load logger
-import { logger } from './modules/logger/winston'
+import logger from './modules/logger/winston'
 
 // load body-parser to parse post body
 import bodyParser from 'body-parser'
