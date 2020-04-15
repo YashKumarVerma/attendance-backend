@@ -29,8 +29,10 @@ app.use(bodyParser.json())
 
 // binding routes
 import userRoutes from './modules/user/routes'
+import eventRoutes from './modules/event/routes'
 
 app.use('/user', userRoutes)
+app.use('/event', eventRoutes)
 
 // start listening on ports
 app.listen(port, () => {
