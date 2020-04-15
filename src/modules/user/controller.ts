@@ -1,5 +1,5 @@
 import { SuccessResponse, ErrorResponse } from './interface'
-import UserSchema from './schema'
+import { UserModel } from './schema'
 import logger from '../logger/winston'
 import { Request, Response } from 'express'
 
@@ -7,7 +7,7 @@ class UserOperations {
   static add(req: Request) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       try {
-        UserSchema.create(req.body.user)
+        UserModel.create(req.body.user)
           .then((resp) => {
             resolve({
               error: false,
@@ -63,7 +63,7 @@ class UserOperations {
 
       const username = req.params.username
       try {
-        UserSchema.deleteOne({ username: username })
+        UserModel.deleteOne({ username: username })
           .then((resp) => {
             if (resp.deletedCount === 1) {
               resolve({
@@ -106,7 +106,7 @@ class UserOperations {
         })
       }
 
-      UserSchema.findOne({ username: req.params.username })
+      UserModel.findOne({ username: req.params.username })
         .then((user) => {
           if (!user) {
             reject({
@@ -143,7 +143,7 @@ class UserOperations {
         })
       }
 
-      UserSchema.findByIdAndUpdate(req.body.user._id, { $set: req.body.user })
+      UserModel.findByIdAndUpdate(req.body.user._id, { $set: req.body.user })
         .exec()
         .then(() => {
           resolve({
