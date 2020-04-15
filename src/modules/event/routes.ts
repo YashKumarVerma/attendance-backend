@@ -16,7 +16,7 @@ router.post('/create', (req: Request, res: Response): void => {
     })
 })
 
-router.delete('/:username', (req: Request, res: Response): void => {
+router.delete('/:eventSlug', (req: Request, res: Response): void => {
   EventOperations.delete(req)
     .then((resp: SuccessResponse) => {
       res.status(200).json(resp)
@@ -26,8 +26,8 @@ router.delete('/:username', (req: Request, res: Response): void => {
     })
 })
 
-router.get('/:username', (req: Request, res: Response): void => {
-  EventOperations.getUser(req)
+router.get('/:eventSlug', (req: Request, res: Response): void => {
+  EventOperations.getEvent(req)
     .then((resp: SuccessResponse) => {
       res.status(200).json(resp)
     })

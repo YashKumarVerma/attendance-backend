@@ -1,29 +1,14 @@
 import mongoose from 'mongoose'
 import EventValidator from './validator'
+import { SessionSchema } from '../session/schema'
+import { UserSchema } from '../user/schema'
 
 const Event = new mongoose.Schema({
-  admin: {
-    type: String,
-    required: 'Username Required',
-    unique: true,
-    lowercase: true,
-    trim: true,
-    validate: [EventValidator.username, 'invalid username passed as admin'],
-  },
-  participants: [
-    {
-      type: String,
-      required: 'Participant Username Required',
-      unique: true,
-      lowercase: true,
-      trim: true,
-      validate: [
-        EventValidator.username,
-        'invalid username passed as participant',
-      ],
-    },
-  ],
-  eventName: {
+  admin: UserSchema,
+  participants: [UserSchema],
+  sessions: [SessionSchema],
+
+  name: {
     type: String,
     required: 'Event Name Required',
     trim: true,
@@ -32,7 +17,15 @@ const Event = new mongoose.Schema({
       'only alphanumeric characters allowed as event name',
     ],
   },
-  eventPicture: {
+
+  slug: {
+    type: String,
+    required: 'Event Slug Required',
+    trim: true,
+    unique: true,
+  },
+
+  picture: {
     type: String,
     default: 'http://via.placeholder.com/150',
     trim: true,
@@ -41,13 +34,12 @@ const Event = new mongoose.Schema({
       'invalid url passed as profile picture link',
     ],
   },
-  sessions: [
-    {
-      type: String,
-      trim: true,
-      lowercase: true,
-    },
-  ],
+
+  description: {
+    type: String,
+    required: false,
+  },
 })
 
-export default mongoose.model('Event', Event)
+const EventModel = mongoose.model('Event', Event)
+export { Event as EventSchema, EventModel }

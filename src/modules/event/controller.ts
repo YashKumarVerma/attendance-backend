@@ -1,5 +1,5 @@
 import { SuccessResponse, ErrorResponse } from './interface'
-import EventSchema from './schema'
+import { EventModel } from './schema'
 import logger from '../logger/winston'
 import { Request, Response } from 'express'
 
@@ -7,7 +7,7 @@ class EventOperations {
   static add(req: Request) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       try {
-        EventSchema.create(req.body.event)
+        EventModel.create(req.body.event)
           .then((resp) => {
             resolve({
               error: false,
@@ -53,16 +53,16 @@ class EventOperations {
 
   static delete(req: Request) {
     return new Promise<SuccessResponse>((resolve, reject) => {
-      if (!req.params.eventname) {
+      if (!req.params.eventSlug) {
         reject({
           error: true,
-          message: 'eventname required to delete event',
+          message: 'event slug required to delete event',
           payload: {},
         })
       }
 
       try {
-        EventSchema.deleteOne({ username: req.params.eventname })
+        EventModel.deleteOne({ slug: req.params.eventSlug })
           .then((resp) => {
             if (resp.deletedCount === 1) {
               resolve({
@@ -95,17 +95,17 @@ class EventOperations {
     })
   }
 
-  static getUser(req: Request) {
+  static getEvent(req: Request) {
     return new Promise<SuccessResponse>((resolve, reject) => {
-      if (!req.params.eventname) {
+      if (!req.params.eventSlug) {
         reject({
           error: true,
-          message: 'eventname required to return details',
+          message: 'event slug required to return details',
           payload: {},
         })
       }
 
-      EventSchema.findOne({ username: req.params.eventname })
+      EventModel.findOne({ username: req.params.eventSlug })
         .then((event) => {
           if (!event) {
             reject({
@@ -142,7 +142,7 @@ class EventOperations {
         })
       }
 
-      EventSchema.findByIdAndUpdate(req.body.event._id, {
+      EventModel.findByIdAndUpdate(req.body.event._id, {
         $set: req.body.event,
       })
         .exec()
