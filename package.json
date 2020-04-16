@@ -6,7 +6,6 @@
   "scripts": {
     "lint": "eslint ./src/**/*.ts --fix",
     "build": "tsc",
-    "test": "mocha tests/**/*.test.ts",
     "server": "ts-node src/app.ts"
   },
   "repository": {
