@@ -1,7 +1,7 @@
-import { SuccessResponse, ErrorResponse } from './interface'
+import { Request } from 'express'
+import { SuccessResponse } from './interface'
 import { UserModel } from './schema'
 import logger from '../logger/winston'
-import { Request, Response } from 'express'
 
 class UserOperations {
   static add(req: Request) {
@@ -61,9 +61,9 @@ class UserOperations {
         })
       }
 
-      const username = req.params.username
+      const { username } = req.params
       try {
-        UserModel.deleteOne({ username: username })
+        UserModel.deleteOne({ username })
           .then((resp) => {
             if (resp.deletedCount === 1) {
               resolve({

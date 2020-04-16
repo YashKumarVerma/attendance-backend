@@ -23,6 +23,10 @@ const Event = new mongoose.Schema({
     required: 'Event Slug Required',
     trim: true,
     unique: true,
+    validate: [
+      EventValidator.slug,
+      'event slug should be atleast 6 characters long',
+    ],
   },
 
   picture: {

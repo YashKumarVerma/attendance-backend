@@ -9,6 +9,10 @@ const Session = new mongoose.Schema({
     lowercase: true,
     trim: true,
     unique: true,
+    validate: [
+      SessionValidator.slug,
+      'slug name should be at-least 4 characters long',
+    ],
   },
 
   sessionName: {

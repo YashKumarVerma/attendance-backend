@@ -8,6 +8,7 @@ class EventValidator {
       validator.isLength(username, { min: 4, max: 20 })
     )
   }
+
   // function to validate profile url
   static link(url: string): boolean {
     return validator.isURL(url)
@@ -15,7 +16,12 @@ class EventValidator {
 
   //   function to validate generic text fields
   static genericText(text: string): boolean {
-    return true
+    return validator.isLength(text, { min: 0 })
+  }
+
+  //   function to validate slus
+  static slug(slug: string): boolean {
+    return validator.isLength(slug, { min: 6 })
   }
 }
 

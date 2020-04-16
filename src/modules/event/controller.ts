@@ -1,7 +1,7 @@
-import { SuccessResponse, ErrorResponse } from './interface'
+import { Request } from 'express'
+import { SuccessResponse } from './interface'
 import { EventModel } from './schema'
 import logger from '../logger/winston'
-import { Request, Response } from 'express'
 
 class EventOperations {
   static add(req: Request) {

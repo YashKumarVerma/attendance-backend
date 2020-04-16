@@ -1,7 +1,7 @@
+import { Request } from 'express'
 import logger from '../logger/winston'
 import { SessionModel } from './schema'
-import { Request, Response } from 'express'
-import { SuccessResponse, ErrorResponse } from './interface'
+import { SuccessResponse } from './interface'
 
 class SessionOperations {
   static add(req: Request) {

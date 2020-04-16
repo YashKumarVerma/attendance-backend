@@ -20,12 +20,12 @@ class UserValidator {
 
   // function to validate password
   static password(password: string): boolean {
-    return true
+    return validator.isLength(password, { min: 6 })
   }
 
   //   function to validate generic text fields
   static genericText(text: string): boolean {
-    return true
+    return validator.isLength(text, { min: 0 })
   }
 }
 

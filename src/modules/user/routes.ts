@@ -1,8 +1,7 @@
-import express from 'express'
-import { Request, Response } from 'express'
-import logger from '../logger/winston'
+import express, { Request, Response } from 'express'
+
 import UserOperations from './controller'
-import { SuccessResponse, ErrorResponse } from './interface'
+import { SuccessResponse } from './interface'
 
 const router = express.Router()
 

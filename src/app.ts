@@ -1,22 +1,28 @@
-require('dotenv').config()
-
 // load express
 import express from 'express'
 
-// load logger
+// loading middle-wares
+import bodyParser from 'body-parser'
+
 import logger from './modules/logger/winston'
 
 // load body-parser to parse post body
-import bodyParser from 'body-parser'
 
-// // create instance of express
+// connect to database
+import database from './modules/database/connect'
+
+// binding routes
+import userRoutes from './modules/user/routes'
+import eventRoutes from './modules/event/routes'
+import sessionRoutes from './modules/session/routes'
+
+require('dotenv').config()
+
+// create instance of express
 const app = express()
 
-// // define port to start server on
+// define port to start server on
 const port = process.env.PORT || 3000
-
-// // connect to database
-import database from './modules/database/connect'
 database.connect()
 
 // parse valid requests only
@@ -26,11 +32,6 @@ app.use(
   }),
 )
 app.use(bodyParser.json())
-
-// binding routes
-import userRoutes from './modules/user/routes'
-import eventRoutes from './modules/event/routes'
-import sessionRoutes from './modules/session/routes'
 
 app.use('/user', userRoutes)
 app.use('/event', eventRoutes)

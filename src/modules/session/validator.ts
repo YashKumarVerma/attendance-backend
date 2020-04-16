@@ -11,7 +11,12 @@ class SessionValidator {
 
   //   function to validate generic text fields
   static genericText(text: string): boolean {
-    return true
+    return validator.isLength(text, { min: 0 })
+  }
+
+  //   function to validate slus
+  static slug(slug: string): boolean {
+    return validator.isLength(slug, { min: 6 })
   }
 }
 

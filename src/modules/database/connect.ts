@@ -1,9 +1,9 @@
 // load configurations
-require('dotenv').config()
-
 // load mongoose wrapper
 import mongoose from 'mongoose'
 import logger from '../logger/winston'
+
+require('dotenv').config()
 // define an instance of database
 
 class Database {
