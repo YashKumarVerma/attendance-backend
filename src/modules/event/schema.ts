@@ -1,12 +1,30 @@
 import mongoose from 'mongoose'
 import EventValidator from './validator'
-import { SessionSchema } from '../session/schema'
-import { UserSchema } from '../user/schema'
 
 const Event = new mongoose.Schema({
-  admin: UserSchema,
-  participants: [UserSchema],
-  sessions: [SessionSchema],
+  admin: {
+    type: String,
+    required: 'admin id required ',
+    trim: true,
+  },
+
+  participants: [
+    {
+      type: String,
+      trim: true,
+      required: 'participant id required ',
+      unique: true,
+    },
+  ],
+
+  sessions: [
+    {
+      type: String,
+      trim: true,
+      required: 'session id required',
+      unique: true,
+    },
+  ],
 
   name: {
     type: String,
@@ -20,7 +38,7 @@ const Event = new mongoose.Schema({
 
   slug: {
     type: String,
-    required: 'Event Slug Required',
+    required: 'property slug required',
     trim: true,
     unique: true,
     validate: [

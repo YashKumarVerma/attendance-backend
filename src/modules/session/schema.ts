@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 import SessionValidator from './validator'
-import { UserSchema } from '../user/schema'
 
 const Session = new mongoose.Schema({
   slug: {
@@ -37,11 +36,27 @@ const Session = new mongoose.Schema({
 
   overtimePermission: {
     type: Boolean,
-    required: 'Overtime permissions  required to create session',
+    required: 'Overtime permissions required to create session',
   },
 
-  admin: UserSchema,
-  participants: [UserSchema],
+  admin: {
+    type: String,
+    required: 'admin user._id required',
+  },
+
+  participants: [
+    {
+      type: String,
+      required: 'participant user._id required',
+    },
+  ],
+
+  createdAt: [
+    {
+      type: Number,
+      required: 'createdAt should be a unix timestamp',
+    },
+  ],
 })
 
 const SessionModel = mongoose.model('Session', Session)

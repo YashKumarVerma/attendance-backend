@@ -6,9 +6,16 @@ import logger from '../logger/winston'
 class EventOperations {
   static add(req: Request) {
     return new Promise<SuccessResponse>((resolve, reject) => {
+      if (!req.body.event) {
+        reject({
+          error: true,
+          message: 'object required to create event',
+        })
+      }
       try {
         EventModel.create(req.body.event)
           .then((resp) => {
+            console.log(resp)
             resolve({
               error: false,
               message: 'Event created successfully',
