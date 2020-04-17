@@ -35,8 +35,18 @@ router.get('/:sessionSlug', (req: Request, res: Response): void => {
     })
 })
 
-router.put('/update', (req: Request, res: Response): void => {
+router.put('/:sessionSlug/update', (req: Request, res: Response): void => {
   SessionOperations.update(req)
+    .then((resp: SuccessResponse) => {
+      res.status(200).json(resp)
+    })
+    .catch((error: any) => {
+      res.status(400).json(error)
+    })
+})
+
+router.put('/:sessionSlug/participant', (req: Request, res: Response): void => {
+  SessionOperations.addParticipant(req)
     .then((resp: SuccessResponse) => {
       res.status(200).json(resp)
     })

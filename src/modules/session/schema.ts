@@ -51,12 +51,10 @@ const Session = new mongoose.Schema({
     },
   ],
 
-  createdAt: [
-    {
-      type: Number,
-      required: 'createdAt should be a unix timestamp',
-    },
-  ],
+  createdAt: {
+    type: Number,
+    required: 'createdAt should be a unix timestamp',
+  },
 })
 
 const SessionModel = mongoose.model('Session', Session)
