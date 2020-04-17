@@ -10,6 +10,7 @@ const User = new mongoose.Schema({
     trim: true,
     validate: [UserValidator.username, 'invalid username passed'],
   },
+
   fullName: {
     type: String,
     required: 'First name Required',
@@ -19,6 +20,7 @@ const User = new mongoose.Schema({
       'only alphanumeric characters allowed in full name',
     ],
   },
+
   profilePicture: {
     type: String,
     default: 'http://via.placeholder.com/150',
@@ -28,6 +30,7 @@ const User = new mongoose.Schema({
       'invalid url passed as profile picture link',
     ],
   },
+
   email: {
     type: String,
     required: 'E-Mail Address required',
@@ -36,6 +39,7 @@ const User = new mongoose.Schema({
     validate: [UserValidator.email, 'invalid email passed'],
     trim: true,
   },
+
   password: {
     type: String,
     required: true,
