@@ -1,32 +1,27 @@
-import mongoose from 'mongoose'
+import mongoose, { mongo } from 'mongoose'
 import EventValidator from './validator'
 
 const Event = new mongoose.Schema({
   admin: {
-    type: String,
-    required: 'admin id required ',
+    type: mongoose.Schema.Types.ObjectId,
     trim: true,
   },
 
   participants: [
     {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       trim: true,
-      required: 'participant id required ',
-      unique: true,
     },
   ],
 
   sessions: [
     {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       trim: true,
-      required: 'session id required',
-      unique: true,
     },
   ],
 
-  name: {
+  eventName: {
     type: String,
     required: 'Event Name Required',
     trim: true,

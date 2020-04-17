@@ -2,6 +2,7 @@ import { Request } from 'express'
 import { SuccessResponse } from './interface'
 import { EventModel } from './schema'
 import logger from '../logger/winston'
+import { isPrimitive } from 'util'
 
 class EventOperations {
   static add(req: Request) {
@@ -28,7 +29,7 @@ class EventOperations {
               reject({
                 error: true,
                 payload: error,
-                message: 'error in db operation to create a new event',
+                message: error.errmsg,
               })
             }
 
@@ -37,7 +38,7 @@ class EventOperations {
               reject({
                 error: true,
                 message: 'Validation Error',
-                payload: error,
+                payload: error.message,
               })
             }
 
@@ -112,7 +113,7 @@ class EventOperations {
         })
       }
 
-      EventModel.findOne({ username: req.params.eventSlug })
+      EventModel.findOne({ slug: req.params.eventSlug })
         .then((event) => {
           if (!event) {
             reject({
@@ -141,23 +142,30 @@ class EventOperations {
   static update(req: Request) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       // check if username to be updated actually exists
-      if (!req.body.event || !req.body.event._id) {
+      if (!req.body.event || !req.params.eventSlug) {
         reject({
           error: true,
-          message: 'event._id needed to update document',
+          message: 'eventslug as slug needed to update document',
           payload: {},
         })
       }
 
-      EventModel.findByIdAndUpdate(req.body.event._id, {
-        $set: req.body.event,
-      })
+      EventModel.findOneAndUpdate(
+        { slug: req.params.eventSlug },
+        {
+          $set: {
+            eventName: req.body.event.eventName,
+            picture: req.body.event.picture,
+            description: req.body.event.description,
+          },
+        },
+      )
         .exec()
-        .then(() => {
+        .then((resp) => {
           resolve({
             error: false,
             message: 'event update successful',
-            payload: {},
+            payload: resp,
           })
         })
         .catch((err) => {
@@ -166,6 +174,90 @@ class EventOperations {
             error: true,
             message: 'error updating event by id',
             payload: err,
+          })
+        })
+    })
+  }
+
+  static addParticipant(req: Request) {
+    return new Promise<SuccessResponse>((resolve, reject) => {
+      //   check if all valid data provided to add new user to database
+      if (!req.body.users || !req.params.eventSlug) {
+        reject({
+          error: true,
+          message: 'user._id and event-slug needed to add participant',
+          payload: {},
+        })
+      }
+
+      //   now push user to collection
+      EventModel.updateOne(
+        { slug: req.params.eventSlug },
+        {
+          $addToSet: {
+            participants: {
+              $each: req.body.users,
+            },
+          },
+        },
+      )
+        .exec()
+        .then((resp) => {
+          //   console.log(resp)
+          resolve({
+            error: false,
+            message: `user added to event ${req.params.eventSlug}`,
+            payload: resp,
+          })
+        })
+        .catch((error) => {
+          //   console.log(error)
+          reject({
+            error: true,
+            message: `error adding participant to event ${req.params.eventSlug}`,
+            payload: error,
+          })
+        })
+    })
+  }
+
+  static addSession(req: Request) {
+    return new Promise<SuccessResponse>((resolve, reject) => {
+      //   check if all valid data provided to add new session to database
+      if (!req.body.sessions || !req.params.eventSlug) {
+        reject({
+          error: true,
+          message: 'session._id and event-slug needed to add session',
+          payload: {},
+        })
+      }
+
+      //   now push user to collection
+      EventModel.updateOne(
+        { slug: req.params.eventSlug },
+        {
+          $addToSet: {
+            sessions: {
+              $each: req.body.sessions,
+            },
+          },
+        },
+      )
+        .exec()
+        .then((resp) => {
+          //   console.log(resp)
+          resolve({
+            error: false,
+            message: `session(s) added to event ${req.params.eventSlug}`,
+            payload: resp,
+          })
+        })
+        .catch((error) => {
+          //   console.log(error)
+          reject({
+            error: true,
+            message: `error adding session(s) to event ${req.params.eventSlug}`,
+            payload: error,
           })
         })
     })
