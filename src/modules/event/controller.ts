@@ -2,7 +2,6 @@ import { Request } from 'express'
 import { SuccessResponse } from './interface'
 import { EventModel } from './schema'
 import logger from '../logger/winston'
-import { isPrimitive } from 'util'
 
 class EventOperations {
   static add(req: Request) {

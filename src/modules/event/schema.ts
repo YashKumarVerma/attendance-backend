@@ -3,20 +3,21 @@ import EventValidator from './validator'
 
 const Event = new mongoose.Schema({
   admin: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     trim: true,
+    required: true,
   },
 
   participants: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       trim: true,
     },
   ],
 
   sessions: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       trim: true,
     },
   ],

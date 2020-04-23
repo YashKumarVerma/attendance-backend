@@ -6,7 +6,10 @@ import bodyParser from 'body-parser'
 
 import logger from './modules/logger/winston'
 
-// load body-parser to parse post body
+import cors from 'cors'
+
+// write middleware to auth requests
+import AuthMiddleWare from './modules/auth/middleware'
 
 // connect to database
 import database from './modules/database/connect'
@@ -32,7 +35,9 @@ app.use(
   }),
 )
 app.use(bodyParser.json())
+app.use(cors())
 
+app.use('/', authMiddleWare)
 app.use('/user', userRoutes)
 app.use('/event', eventRoutes)
 app.use('/session', sessionRoutes)

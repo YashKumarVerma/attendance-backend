@@ -45,4 +45,24 @@ router.put('/update', (req: Request, res: Response): void => {
     })
 })
 
+router.get('/:username/:eventSlug', (req: Request, res: Response): void => {
+  UserOperations.getEvents(req)
+    .then((resp: SuccessResponse) => {
+      res.json(resp)
+    })
+    .catch((error: any) => {
+      res.json(error)
+    })
+})
+
+router.post('/login', (req: Request, res: Response): void => {
+  UserOperations.login(req)
+    .then((resp: SuccessResponse) => {
+      res.status(200).json(resp)
+    })
+    .catch((error) => {
+      res.status(401).json(error)
+    })
+})
+
 export default router

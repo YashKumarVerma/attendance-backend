@@ -1,7 +1,9 @@
 import { Request } from 'express'
 import { SuccessResponse } from './interface'
 import { UserModel } from './schema'
+import { EventModel } from '../event/schema'
 import logger from '../logger/winston'
+import jwt from 'jsonwebtoken'
 
 class UserOperations {
   static add(req: Request) {
@@ -157,6 +159,94 @@ class UserOperations {
           reject({
             error: true,
             message: 'error updating user by id',
+            payload: err,
+          })
+        })
+    })
+  }
+
+  static getEvents(req: Request) {
+    return new Promise<SuccessResponse>((resolve, reject) => {
+      if (!req.params.username || !req.params.eventSlug) {
+        reject({
+          error: true,
+          message: 'username and event name required to return details',
+          payload: {},
+        })
+      }
+
+      EventModel.findOne({
+        admin: req.params.username,
+        slug: req.params.eventSlug,
+      })
+        .then((event) => {
+          resolve({
+            error: false,
+            message: 'event fetch successful',
+            payload: event,
+          })
+        })
+        .catch((err) => {
+          reject({
+            error: true,
+            message: 'Error in receiving events',
+            payload: err,
+          })
+        })
+    })
+  }
+
+  static login(req: Request) {
+    return new Promise<SuccessResponse>((resolve, reject) => {
+      if (!req.body.username || !req.body.password) {
+        reject({
+          error: true,
+          message: 'Username and Password both are required for login',
+          payload: {},
+        })
+      }
+
+      UserModel.findOne({
+        username: req.body.username,
+        password: req.body.password,
+      })
+        .then((user: any) => {
+          if (!user) {
+            reject({
+              error: true,
+              message: 'Invalid Credentials',
+              payload: {},
+            })
+          }
+          //   create a jwt token for user
+          const token = jwt.sign(
+            {
+              username: user.username,
+              email: user.email,
+            },
+            String(process.env.SECRETKEY),
+            {
+              expiresIn: '1d',
+            },
+          )
+          logger.info(`Login Username: ${user.username}`)
+          resolve({
+            error: false,
+            message: 'Login Successful',
+            payload: {
+              fullname: user.fullName,
+              username: user.username,
+              profilePicture: user.profilePicture,
+              email: user.email,
+              token,
+            },
+          })
+        })
+        .catch((err) => {
+          logger.error('error getting user data')
+          reject({
+            error: true,
+            message: 'Internal Server Error',
             payload: err,
           })
         })
