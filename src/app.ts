@@ -9,7 +9,7 @@ import logger from './modules/logger/winston'
 import cors from 'cors'
 
 // write middleware to auth requests
-import AuthMiddleWare from './modules/auth/middleware'
+import authMiddleWare from './modules/auth/middleware'
 
 // connect to database
 import database from './modules/database/connect'
