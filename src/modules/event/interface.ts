@@ -1,10 +1,6 @@
-export interface SuccessResponse {
-  error: boolean
-  message: string
-  payload: any
-}
+import { Request } from 'express'
 
-export interface ErrorResponse {
+export interface SuccessResponse {
   error: boolean
   message: string
   payload: any

@@ -37,8 +37,8 @@ app.use(
 app.use(bodyParser.json())
 app.use(cors())
 
-app.use('/', authMiddleWare)
 app.use('/user', userRoutes)
+app.use('/', authMiddleWare)
 app.use('/event', eventRoutes)
 app.use('/session', sessionRoutes)
 

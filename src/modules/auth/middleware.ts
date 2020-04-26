@@ -35,7 +35,7 @@ const authMiddleware = (req: any, res: any, next: any) => {
     })
   }
 
-  req.client = data
+  res.locals.client = data
   next()
 }
 export default authMiddleware

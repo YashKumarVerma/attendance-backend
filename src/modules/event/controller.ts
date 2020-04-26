@@ -1,10 +1,10 @@
-import { Request } from 'express'
+import { Request, Response } from 'express'
 import { SuccessResponse } from './interface'
 import { EventModel } from './schema'
 import logger from '../logger/winston'
 
 class EventOperations {
-  static add(req: Request) {
+  static add(req: Request, res: Response) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       if (!req.body.event) {
         reject({
@@ -58,7 +58,7 @@ class EventOperations {
     })
   }
 
-  static delete(req: Request) {
+  static delete(req: Request, res: Response) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       if (!req.params.eventSlug) {
         reject({
@@ -102,7 +102,7 @@ class EventOperations {
     })
   }
 
-  static getEvent(req: Request) {
+  static getEvent(req: Request, res: Response) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       if (!req.params.eventSlug) {
         reject({
@@ -138,7 +138,7 @@ class EventOperations {
     })
   }
 
-  static update(req: Request) {
+  static update(req: Request, res: Response) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       // check if username to be updated actually exists
       if (!req.body.event || !req.params.eventSlug) {
@@ -178,7 +178,7 @@ class EventOperations {
     })
   }
 
-  static addParticipant(req: Request) {
+  static addParticipant(req: Request, res: Response) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       //   check if all valid data provided to add new user to database
       if (!req.body.users || !req.params.eventSlug) {
@@ -220,7 +220,7 @@ class EventOperations {
     })
   }
 
-  static addSession(req: Request) {
+  static addSession(req: Request, res: Response) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       //   check if all valid data provided to add new session to database
       if (!req.body.sessions || !req.params.eventSlug) {
@@ -257,6 +257,37 @@ class EventOperations {
             error: true,
             message: `error adding session(s) to event ${req.params.eventSlug}`,
             payload: error,
+          })
+        })
+    })
+  }
+
+  static listAllUserEvents(req: Request, res: Response) {
+    return new Promise<SuccessResponse>((resolve, reject) => {
+      //   get username from auth token
+      const { username } = res.locals.client
+
+      EventModel.find({ admin: username })
+        .then((event) => {
+          if (!event) {
+            reject({
+              error: true,
+              message: 'No Event found',
+              payload: {},
+            })
+          }
+          resolve({
+            error: false,
+            message: 'Event details found',
+            payload: event,
+          })
+        })
+        .catch((err) => {
+          logger.error('Error getting event data')
+          reject({
+            error: true,
+            message: 'Unexpected error fetching event data',
+            payload: err,
           })
         })
     })
