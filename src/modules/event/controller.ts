@@ -13,7 +13,10 @@ class EventOperations {
         })
       }
       try {
-        EventModel.create(req.body.event)
+        const payload = req.body.event
+        payload.admin = res.locals.client.username
+
+        EventModel.create(payload)
           .then((resp) => {
             console.log(resp)
             resolve({
@@ -28,7 +31,7 @@ class EventOperations {
               reject({
                 error: true,
                 payload: error,
-                message: error.errmsg,
+                message: 'Event with same slug exists',
               })
             }
 
@@ -36,8 +39,8 @@ class EventOperations {
               logger.error(`Validation: ${error.message}`)
               reject({
                 error: true,
-                message: 'Validation Error',
-                payload: error.message,
+                message: error.message,
+                payload: {},
               })
             }
 
@@ -69,23 +72,26 @@ class EventOperations {
       }
 
       try {
-        EventModel.deleteOne({ slug: req.params.eventSlug })
+        EventModel.deleteOne({
+          slug: req.params.eventSlug,
+          admin: res.locals.client.username,
+        })
           .then((resp) => {
             if (resp.deletedCount === 1) {
               resolve({
                 error: false,
-                message: 'event deletion successful',
+                message: 'Event Deletion successful',
                 payload: {},
               })
             }
             reject({
               error: true,
-              message: 'event not found',
+              message: 'Event not found',
               payload: {},
             })
           })
           .catch((err) => {
-            logger.error('error in deleting event')
+            logger.error('Error in deleting event')
             reject({
               error: true,
               message: 'unexpected error in deleting event',
@@ -95,7 +101,7 @@ class EventOperations {
       } catch (error) {
         reject({
           error: true,
-          message: 'unexpected error in deleting event',
+          message: 'Unexpected error in deleting event',
           payload: error,
         })
       }
