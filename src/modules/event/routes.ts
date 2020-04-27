@@ -25,6 +25,16 @@ router.get('/:eventSlug', (req: Request, res: Response): void => {
     })
 })
 
+router.get('/:eventSlug/sessions', (req: Request, res: Response): void => {
+  EventOperations.getSessionsOfEvent(req, res)
+    .then((resp: SuccessResponse) => {
+      res.status(200).json(resp)
+    })
+    .catch((error: any) => {
+      res.status(400).json(error)
+    })
+})
+
 router.post('/create', (req: Request, res: Response): void => {
   EventOperations.add(req, res)
     .then((resp: SuccessResponse) => {

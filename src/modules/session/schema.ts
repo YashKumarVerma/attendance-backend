@@ -14,6 +14,13 @@ const Session = new mongoose.Schema({
     ],
   },
 
+  parentEvent: {
+    type: String,
+    required: 'Parent Event needed to set up session',
+    lowercase: true,
+    trim: true,
+  },
+
   sessionName: {
     type: String,
     required: 'Session Name Required',
@@ -41,7 +48,7 @@ const Session = new mongoose.Schema({
 
   admin: {
     type: String,
-    required: 'admin user._id required',
+    required: 'admin required',
   },
 
   participants: [

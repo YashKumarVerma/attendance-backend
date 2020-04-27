@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { SuccessResponse } from './interface'
 import { EventModel } from './schema'
+import { SessionModel } from '../session/schema'
 import logger from '../logger/winston'
 
 class EventOperations {
@@ -130,6 +131,45 @@ class EventOperations {
           resolve({
             error: false,
             message: 'event details found',
+            payload: event,
+          })
+        })
+        .catch((err) => {
+          logger.error('error getting event data')
+          reject({
+            error: true,
+            message: 'unexpected error fetching event data',
+            payload: err,
+          })
+        })
+    })
+  }
+
+  static getSessionsOfEvent(req: Request, res: Response) {
+    return new Promise<SuccessResponse>((resolve, reject) => {
+      if (!req.params.eventSlug) {
+        reject({
+          error: true,
+          message: 'Event slug required to return details',
+          payload: {},
+        })
+      }
+
+      SessionModel.find({
+        parentEvent: req.params.eventSlug,
+        admin: res.locals.client.username,
+      })
+        .then((event) => {
+          if (!event) {
+            reject({
+              error: true,
+              message: 'No Sessions found',
+              payload: {},
+            })
+          }
+          resolve({
+            error: false,
+            message: 'Event details found',
             payload: event,
           })
         })

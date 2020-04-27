@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import logger from '../logger/winston'
 import { SessionModel } from './schema'
+import { EventModel } from '../event/schema'
 import { SuccessResponse } from './interface'
 
 class SessionOperations {
@@ -23,13 +24,23 @@ class SessionOperations {
           createdAt: new Date().getTime(),
           overtimePermission:
             req.body.session.overtimePermission == 'on' ? true : false,
+          parentEvent: req.body.session.parent,
         })
           .then((resp) => {
             logger.info(`Session Created Successfully`)
-            resolve({
-              error: false,
-              message: 'Session created successfully',
-              payload: resp,
+
+            // when session created successfully, append name of session to event object
+            EventModel.updateOne(
+              { slug: req.body.session.parent },
+              {
+                $push: { sessions: req.body.session.slug },
+              },
+            ).then((success) => {
+              resolve({
+                error: false,
+                message: 'Session created successfully',
+                payload: resp,
+              })
             })
           })
           .catch((error: any) => {
