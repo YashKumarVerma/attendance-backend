@@ -1,21 +1,31 @@
-import { Request } from 'express'
+import { Request, Response } from 'express'
 import logger from '../logger/winston'
 import { SessionModel } from './schema'
 import { SuccessResponse } from './interface'
 
 class SessionOperations {
-  static add(req: Request) {
+  static add(req: Request, res: Response) {
     return new Promise<SuccessResponse>((resolve, reject) => {
-      console.log(req.body, req.params)
       if (!req.body.session.slug) {
         reject({
           error: true,
-          message: 'incomplete data to create session',
+          message: 'Incomplete data to create session',
         })
       }
+
       try {
-        SessionModel.create(req.body.session)
+        SessionModel.create({
+          slug: req.body.session.slug,
+          admin: res.locals.client.username,
+          sessionName: req.body.session.sessionName,
+          endTime: new Date(req.body.session.endTime).getTime(),
+          startTime: new Date(req.body.session.startTime).getTime(),
+          createdAt: new Date().getTime(),
+          overtimePermission:
+            req.body.session.overtimePermission == 'on' ? true : false,
+        })
           .then((resp) => {
+            logger.info(`Session Created Successfully`)
             resolve({
               error: false,
               message: 'Session created successfully',
@@ -28,7 +38,7 @@ class SessionOperations {
               reject({
                 error: true,
                 payload: error,
-                message: 'error in db operation to create a new session',
+                message: 'Session with same slug exists. Try again',
               })
             }
 
@@ -36,8 +46,8 @@ class SessionOperations {
               logger.error(`Validation: ${error.message}`)
               reject({
                 error: true,
-                message: 'Validation Error',
-                payload: error,
+                message: error.message,
+                payload: {},
               })
             }
 
@@ -51,14 +61,14 @@ class SessionOperations {
       } catch (e) {
         reject({
           error: true,
-          message: 'unexpected error in creating new session',
+          message: 'Unexpected error in creating new session',
           payload: e,
         })
       }
     })
   }
 
-  static delete(req: Request) {
+  static delete(req: Request, res: Response) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       if (!req.params.sessionSlug) {
         reject({
@@ -102,7 +112,7 @@ class SessionOperations {
     })
   }
 
-  static getSession(req: Request) {
+  static getSession(req: Request, res: Response) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       if (!req.params.sessionSlug) {
         reject({
@@ -138,7 +148,7 @@ class SessionOperations {
     })
   }
 
-  static update(req: Request) {
+  static update(req: Request, res: Response) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       // check if username to be updated actually exists
       console.log(req.body, req.params)
@@ -175,7 +185,7 @@ class SessionOperations {
     })
   }
 
-  static addParticipant(req: Request) {
+  static addParticipant(req: Request, res: Response) {
     return new Promise<SuccessResponse>((resolve, reject) => {
       //   check if all valid data provided to add new user to database
       if (!req.body.users || !req.params.sessionSlug) {

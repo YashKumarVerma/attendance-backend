@@ -6,7 +6,7 @@ import { SuccessResponse } from './interface'
 const router = express.Router()
 
 router.post('/create', (req: Request, res: Response): void => {
-  SessionOperations.add(req)
+  SessionOperations.add(req, res)
     .then((resp: SuccessResponse) => {
       res.status(200).json(resp)
     })
@@ -16,7 +16,7 @@ router.post('/create', (req: Request, res: Response): void => {
 })
 
 router.delete('/:sessionSlug', (req: Request, res: Response): void => {
-  SessionOperations.delete(req)
+  SessionOperations.delete(req, res)
     .then((resp: SuccessResponse) => {
       res.status(200).json(resp)
     })
@@ -26,7 +26,7 @@ router.delete('/:sessionSlug', (req: Request, res: Response): void => {
 })
 
 router.get('/:sessionSlug', (req: Request, res: Response): void => {
-  SessionOperations.getSession(req)
+  SessionOperations.getSession(req, res)
     .then((resp: SuccessResponse) => {
       res.status(200).json(resp)
     })
@@ -36,7 +36,7 @@ router.get('/:sessionSlug', (req: Request, res: Response): void => {
 })
 
 router.put('/:sessionSlug/update', (req: Request, res: Response): void => {
-  SessionOperations.update(req)
+  SessionOperations.update(req, res)
     .then((resp: SuccessResponse) => {
       res.status(200).json(resp)
     })
@@ -46,7 +46,7 @@ router.put('/:sessionSlug/update', (req: Request, res: Response): void => {
 })
 
 router.put('/:sessionSlug/participant', (req: Request, res: Response): void => {
-  SessionOperations.addParticipant(req)
+  SessionOperations.addParticipant(req, res)
     .then((resp: SuccessResponse) => {
       res.status(200).json(resp)
     })
