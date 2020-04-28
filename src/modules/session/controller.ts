@@ -90,33 +90,36 @@ class SessionOperations {
       }
 
       try {
-        SessionModel.deleteOne({ slug: req.params.sessionSlug })
+        SessionModel.deleteOne({
+          slug: req.params.sessionSlug,
+          admin: res.locals.client.username,
+        })
           .then((resp) => {
             if (resp.deletedCount === 1) {
               resolve({
                 error: false,
-                message: 'session deletion successful',
+                message: 'Session deletion successful',
                 payload: {},
               })
             }
             reject({
               error: true,
-              message: 'session not found',
+              message: 'Session not found',
               payload: {},
             })
           })
           .catch((err) => {
-            logger.error('error in deleting session')
+            logger.error('Error in deleting session')
             reject({
               error: true,
-              message: 'unexpected error in deleting session',
+              message: 'Unexpected error in deleting session',
               payload: err,
             })
           })
       } catch (error) {
         reject({
           error: true,
-          message: 'unexpected error in deleting session',
+          message: 'Enexpected error in deleting session',
           payload: error,
         })
       }
