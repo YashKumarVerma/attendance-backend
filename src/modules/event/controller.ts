@@ -119,7 +119,10 @@ class EventOperations {
         })
       }
 
-      EventModel.findOne({ slug: req.params.eventSlug })
+      EventModel.findOne({
+        slug: req.params.eventSlug,
+        admin: res.locals.client.username,
+      })
         .then((event) => {
           if (!event) {
             reject({
@@ -196,7 +199,7 @@ class EventOperations {
       }
 
       EventModel.findOneAndUpdate(
-        { slug: req.params.eventSlug },
+        { slug: req.params.eventSlug, admin: res.locals.client.username },
         {
           $set: {
             eventName: req.body.event.eventName,
@@ -237,7 +240,7 @@ class EventOperations {
 
       //   now push user to collection
       EventModel.updateOne(
-        { slug: req.params.eventSlug },
+        { slug: req.params.eventSlug, admin: res.locals.client.username },
         {
           $addToSet: {
             participants: {
@@ -279,7 +282,7 @@ class EventOperations {
 
       //   now push user to collection
       EventModel.updateOne(
-        { slug: req.params.eventSlug },
+        { slug: req.params.eventSlug, admin: res.locals.client.username },
         {
           $addToSet: {
             sessions: {
@@ -322,6 +325,9 @@ class EventOperations {
               payload: {},
             })
           }
+
+          //   now find all sessions of the given event(s)
+
           resolve({
             error: false,
             message: 'Event details found',
