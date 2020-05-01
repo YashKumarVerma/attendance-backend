@@ -313,12 +313,11 @@ class EventOperations {
 
   static listAllUserEvents(req: Request, res: Response) {
     return new Promise<SuccessResponse>((resolve, reject) => {
-      //   get username from auth token
       const { username } = res.locals.client
 
       EventModel.find({ admin: username })
-        .then((event) => {
-          if (!event) {
+        .then(async (events) => {
+          if (!events) {
             reject({
               error: true,
               message: 'No Event found',
@@ -326,12 +325,23 @@ class EventOperations {
             })
           }
 
-          //   now find all sessions of the given event(s)
+          await Promise.all(
+            events.map(async (event: any) => {
+              event.sessions = await SessionModel.find(
+                {
+                  parentEvent: event.slug,
+                },
+                { lean: true },
+              )
+
+              return event
+            }),
+          )
 
           resolve({
             error: false,
-            message: 'Event details found',
-            payload: event,
+            message: 'Event Details Found',
+            payload: events,
           })
         })
         .catch((err) => {
