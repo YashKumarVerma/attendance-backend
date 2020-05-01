@@ -1,33 +1,32 @@
-// load configurations
-// load mongoose wrapper
-import mongoose from 'mongoose'
+import { MongoClient, Logger } from 'mongodb'
 import logger from '../logger/winston'
+import Users from '../user/schema'
+// const Users = require('../user/schema')
 
-require('dotenv').config()
-// define an instance of database
+class MongoBot {
+  client: any
+  db: any
+  Users: any
 
-class Database {
-  static connect(): void {
-    mongoose
-      .connect(
-        process.env.DB_CONNECTION_STRING ||
-          'mongodb://localhost:27017/attendance',
-        {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-          useFindAndModify: false,
-          useCreateIndex: true,
-        },
-      )
-      .then(() => {
-        logger.info('Database Connected')
-      })
-      .catch((err: any) => {
-        logger.error('Database connection error')
-        logger.error(err)
-      })
+  constructor() {
+    this.client = new MongoClient(
+      process.env.DB_CONNECTION_STRING ||
+        'mongodb://localhost:27017/attendance',
+      { useUnifiedTopology: true },
+    )
+  }
+  async init() {
+    await this.client.connect()
+    logger.info('Database Connected')
+
+    this.db = this.client.db('attendance')
+    this.Users = new Users(this.db)
   }
 }
 
-// pass instance of database
-export default Database
+async function DatabaseConnector(handle: any) {
+  await handle.init()
+}
+
+export default new MongoBot()
+export { DatabaseConnector }

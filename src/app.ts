@@ -12,12 +12,12 @@ import cors from 'cors'
 import authMiddleWare from './modules/auth/middleware'
 
 // connect to database
-import database from './modules/database/connect'
+import mongo, { DatabaseConnector } from './modules/database/connect'
 
 // binding routes
 import userRoutes from './modules/user/routes'
-import eventRoutes from './modules/event/routes'
-import sessionRoutes from './modules/session/routes'
+// import eventRoutes from './modules/event/routes'
+// import sessionRoutes from './modules/session/routes'
 
 require('dotenv').config()
 
@@ -26,7 +26,8 @@ const app = express()
 
 // define port to start server on
 const port = process.env.PORT || 3000
-database.connect()
+
+DatabaseConnector(mongo)
 
 // parse valid requests only
 app.use(
@@ -39,8 +40,8 @@ app.use(cors())
 
 app.use('/user', userRoutes)
 app.use('/', authMiddleWare)
-app.use('/event', eventRoutes)
-app.use('/session', sessionRoutes)
+// app.use('/event', eventRoutes)
+// app.use('/session', sessionRoutes)
 
 // start listening on ports
 app.listen(port, () => {
