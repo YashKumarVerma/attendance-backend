@@ -2,21 +2,18 @@
 import { MongoClient } from 'mongodb'
 import logger from '../logger/winston'
 
-const connectionString = 'mongodb://127.0.0.1:27017'
+const connectionString = 'mongodb://127.0.0.1:27017/'
 
 var mongodb: any
 
 function connect(callback: any) {
-  MongoClient.connect(
-    connectionString,
-    { useUnifiedTopology: true },
-    (err, db) => {
-      err ? logger.error('Error connecting to Database') : null
+  MongoClient.connect(connectionString, { useUnifiedTopology: true }, (err, client) => {
+    err ? logger.error('Error connecting to Database') : null
 
-      mongodb = db
-      callback()
-    },
-  )
+    const db = client.db('attendance')
+    mongodb = db
+    callback()
+  })
 }
 
 function get() {
