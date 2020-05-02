@@ -37,6 +37,15 @@ class RESPONSE {
     }
   }
 
+  static NOT_FOUND() {
+    return {
+      code: 422,
+      error: true,
+      message: 'Action on a non existing resource was done',
+      payload: null,
+    }
+  }
+
   static ERROR(errorObject: any) {
     // check if error type is a database error
     if (errorObject.name == 'MongoError') {

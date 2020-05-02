@@ -8,11 +8,11 @@ import RESPONSES from '../responses/templates'
  */
 class EventOperations {
   /**
-   * Static asynchronous method to create a new user
-   * @static
+   * Function to add a new event to the database
+   * @param param0 Event object containing specifications of the createObject interface
+   * @param client client object containing authorized client's username and email
    * @async
-   * @param req : Request body containing event object
-   * @returns ControllerResponse object
+   * @static
    */
   static async createNewEvent({ event }: createObject, client: clientTokenData): Promise<ControllerResponse> {
     try {
@@ -29,6 +29,34 @@ class EventOperations {
       return RESPONSES.SUCCESS_OPERATION(null)
 
       //   catching errors
+    } catch (err) {
+      logger.error('Error Creating Event')
+      return RESPONSES.ERROR(err)
+    }
+  }
+
+  /**
+   * Function to delete an event from the database
+   * @param eventSlug slug of the event to delete
+   * @param client client object containing authorized client's username and email
+   * @static
+   * @async
+   */
+  static async deleteEvent(eventSlug: string, client: clientTokenData): Promise<ControllerResponse> {
+    try {
+      if (!eventSlug) {
+        return RESPONSES.INCOMPLETE_REQUEST()
+      }
+      const dbOperation = await db.collection('events').deleteOne({ slug: eventSlug, admin: client.username })
+
+      //  if exactly one item is deleted, return success response
+      if (dbOperation.result.n == 1) {
+        return RESPONSES.SUCCESS_OPERATION()
+
+        // else, return 422 error
+      } else {
+        return RESPONSES.NOT_FOUND()
+      }
     } catch (err) {
       logger.error('Error Creating Event')
       return RESPONSES.ERROR(err)
