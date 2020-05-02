@@ -1,6 +1,7 @@
 import logger from '../logger/winston'
 import { db } from '../database/mongo'
-import { createObject, ControllerResponse, clientTokenData } from './interface'
+import { createObject, ControllerResponse, clientTokenData, eventDetails } from './interface'
+import { sessionDetails } from '../sessions/interface'
 import RESPONSES from '../responses/templates'
 
 /**
@@ -58,7 +59,33 @@ class EventOperations {
         return RESPONSES.NOT_FOUND()
       }
     } catch (err) {
-      logger.error('Error Creating Event')
+      logger.error('Error Deleting Event')
+      return RESPONSES.ERROR(err)
+    }
+  }
+
+  static async getEventDetails(eventSlug: string, client: clientTokenData): Promise<ControllerResponse> {
+    try {
+      if (!eventSlug) {
+        return RESPONSES.INCOMPLETE_REQUEST()
+      }
+
+      const eventDetails: eventDetails = await db.collection('events').findOne({ slug: eventSlug, admin: client.username })
+      let sessionDetails: Array<sessionDetails> = []
+      for (let i = 0; i < eventDetails.sessions.length; i += 1) {
+        const detail = await db.collection('sessions').findOne({ slug: eventDetails.sessions[i], admin: client.username })
+        sessionDetails.push(detail)
+      }
+      eventDetails.sessionDetails = sessionDetails
+
+      if (!eventDetails) {
+        return RESPONSES.NOT_FOUND()
+      }
+
+      logger.info(`Event details for "${eventSlug}" fetched`)
+      return RESPONSES.SUCCESS_OPERATION(eventDetails)
+    } catch (err) {
+      logger.info('Fetching details for event')
       return RESPONSES.ERROR(err)
     }
   }

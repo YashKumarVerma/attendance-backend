@@ -1,6 +1,6 @@
 import { ObjectId } from 'bson'
+import { sessionDetails } from '../sessions/interface'
 
-// local interface (with __xx) to define createUser requirements
 interface createObjectRequirement {
   _id?: ObjectId
   admin?: string
@@ -15,7 +15,6 @@ export interface createObject {
   event: createObjectRequirement
 }
 
-// interface for all controller responses
 export interface ControllerResponse {
   code: number
   error: boolean
@@ -28,4 +27,15 @@ export interface clientTokenData {
   readonly email: string
   readonly iat: number
   readonly exp: number
+}
+
+export interface eventDetails {
+  _id: ObjectId
+  slug: string
+  admin: string
+  eventName: string
+  description: string
+  participants: [string]
+  sessions: [string]
+  sessionDetails?: Array<sessionDetails>
 }

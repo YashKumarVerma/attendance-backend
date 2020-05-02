@@ -18,7 +18,6 @@ export interface createObject {
   session: createObjectRequirement
 }
 
-// interface for all controller responses
 export interface ControllerResponse {
   code: number
   error: boolean
@@ -40,4 +39,17 @@ interface deleteObjectRequirement {
 
 export interface deleteObject {
   session: deleteObjectRequirement
+}
+
+export interface sessionDetails {
+  _id: ObjectId
+  parent: string
+  participants: [string]
+  slug: string
+  sessionName: string
+  endTime: number
+  startTime: number
+  createdAt: number
+  overtimePermission: boolean
+  admin: string
 }

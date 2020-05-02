@@ -3,7 +3,6 @@ import express, { Request, Response, response } from 'express'
 import { db } from '../database/mongo'
 import UserOperations from './controller'
 
-// loading interfaces
 import { ControllerResponse } from './interface'
 
 const router = express.Router()

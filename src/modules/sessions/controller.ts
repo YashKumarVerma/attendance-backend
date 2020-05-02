@@ -3,9 +3,6 @@ import { db } from '../database/mongo'
 import { createObject, ControllerResponse, clientTokenData, deleteObject } from './interface'
 import RESPONSES from '../responses/templates'
 
-/**
- * Class to handle all operations related to Sessions
- */
 class SessionOperations {
   static async createNewSession({ session }: createObject, client: clientTokenData): Promise<ControllerResponse> {
     try {
@@ -31,8 +28,6 @@ class SessionOperations {
         logger.error('Count not create Session due to event push error')
         return RESPONSES.NOT_FOUND()
       }
-
-      //   catching errors
     } catch (err) {
       logger.error('Error Creating Session')
       return RESPONSES.ERROR(err)
