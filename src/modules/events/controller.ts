@@ -1,6 +1,7 @@
 import logger from '../logger/winston'
 import { db } from '../database/mongo'
-import { createObject, ControllerResponse, clientTokenData } from './interface'
+import { createObject, ControllerResponse, clientTokenData, eventDetails } from './interface'
+import { sessionDetails } from '../sessions/interface'
 import RESPONSES from '../responses/templates'
 
 /**
@@ -69,7 +70,14 @@ class EventOperations {
         return RESPONSES.INCOMPLETE_REQUEST()
       }
 
-      const eventDetails = await db.collection('events').findOne({ slug: eventSlug, admin: client.username })
+      const eventDetails: eventDetails = await db.collection('events').findOne({ slug: eventSlug, admin: client.username })
+      let sessionDetails: Array<sessionDetails> = []
+      for (let i = 0; i < eventDetails.sessions.length; i += 1) {
+        const detail = await db.collection('sessions').findOne({ slug: eventDetails.sessions[i], admin: client.username })
+        sessionDetails.push(detail)
+      }
+      eventDetails.sessionDetails = sessionDetails
+
       if (!eventDetails) {
         return RESPONSES.NOT_FOUND()
       }

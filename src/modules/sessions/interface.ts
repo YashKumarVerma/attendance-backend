@@ -40,3 +40,16 @@ interface deleteObjectRequirement {
 export interface deleteObject {
   session: deleteObjectRequirement
 }
+
+export interface sessionDetails {
+  _id: ObjectId
+  parent: string
+  participants: [string]
+  slug: string
+  sessionName: string
+  endTime: number
+  startTime: number
+  createdAt: number
+  overtimePermission: boolean
+  admin: string
+}

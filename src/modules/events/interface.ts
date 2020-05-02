@@ -1,4 +1,5 @@
 import { ObjectId } from 'bson'
+import { sessionDetails } from '../sessions/interface'
 
 interface createObjectRequirement {
   _id?: ObjectId
@@ -26,4 +27,15 @@ export interface clientTokenData {
   readonly email: string
   readonly iat: number
   readonly exp: number
+}
+
+export interface eventDetails {
+  _id: ObjectId
+  slug: string
+  admin: string
+  eventName: string
+  description: string
+  participants: [string]
+  sessions: [string]
+  sessionDetails?: Array<sessionDetails>
 }
