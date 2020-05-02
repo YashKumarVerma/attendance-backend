@@ -5,7 +5,6 @@ export interface loginParams {
   readonly password: string
 }
 
-// local interface (with __xx) to define createUser requirements
 interface signupRequirement {
   _id?: ObjectId
   readonly username: string
@@ -18,7 +17,6 @@ export interface signupObject {
   user: signupRequirement
 }
 
-// interface for all controller responses
 export interface ControllerResponse {
   code: number
   error: boolean

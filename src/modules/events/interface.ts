@@ -1,6 +1,5 @@
 import { ObjectId } from 'bson'
 
-// local interface (with __xx) to define createUser requirements
 interface createObjectRequirement {
   _id?: ObjectId
   admin?: string
@@ -15,7 +14,6 @@ export interface createObject {
   event: createObjectRequirement
 }
 
-// interface for all controller responses
 export interface ControllerResponse {
   code: number
   error: boolean

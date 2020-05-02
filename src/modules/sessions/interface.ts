@@ -18,7 +18,6 @@ export interface createObject {
   session: createObjectRequirement
 }
 
-// interface for all controller responses
 export interface ControllerResponse {
   code: number
   error: boolean
