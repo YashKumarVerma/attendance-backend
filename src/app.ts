@@ -16,8 +16,7 @@ import Seed from './modules/database/validator'
 // seed collections with validations
 connect(async () => {
   logger.info('Database Connected')
-  await Seed.userCollection()
-  await Seed.eventCollection()
+  await Seed()
 })
 
 // create instance of express
@@ -38,6 +37,7 @@ app.use(cors())
 // loading routes
 import userRoutes from './modules/user/routes'
 import eventRoutes from './modules/events/routes'
+import sessionRoutes from './modules/sessions/routes'
 
 // user interaction allowed without token headers
 app.use('/user', userRoutes)
@@ -45,6 +45,7 @@ app.use('/user', userRoutes)
 // all routes next to this will require authentication
 app.use('/', authMiddleWare)
 app.use('/event', eventRoutes)
+app.use('/session', sessionRoutes)
 
 // start listening on ports
 app.listen(port, () => {
