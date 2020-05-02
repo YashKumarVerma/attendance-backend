@@ -1,33 +1,29 @@
-// load express
+require('dotenv').config()
+
 import express from 'express'
 
-// loading middle-wares
 import bodyParser from 'body-parser'
 
 import logger from './modules/logger/winston'
 
 import cors from 'cors'
 
-// write middleware to auth requests
 import authMiddleWare from './modules/auth/middleware'
 
-// connect to database
-import mongo, { DatabaseConnector } from './modules/database/connect'
+import { connect } from './modules/database/mongo'
+import Seed from './modules/database/validator'
 
-// binding routes
-import userRoutes from './modules/user/routes'
-// import eventRoutes from './modules/event/routes'
-// import sessionRoutes from './modules/session/routes'
-
-require('dotenv').config()
+// seed collections with validations
+connect(async () => {
+  logger.info('Database Connected')
+  await Seed()
+})
 
 // create instance of express
 const app = express()
 
 // define port to start server on
 const port = process.env.PORT || 3000
-
-DatabaseConnector(mongo)
 
 // parse valid requests only
 app.use(
@@ -38,10 +34,18 @@ app.use(
 app.use(bodyParser.json())
 app.use(cors())
 
+// loading routes
+import userRoutes from './modules/user/routes'
+import eventRoutes from './modules/events/routes'
+import sessionRoutes from './modules/sessions/routes'
+
+// user interaction allowed without token headers
 app.use('/user', userRoutes)
+
+// all routes next to this will require authentication
 app.use('/', authMiddleWare)
-// app.use('/event', eventRoutes)
-// app.use('/session', sessionRoutes)
+app.use('/event', eventRoutes)
+app.use('/session', sessionRoutes)
 
 // start listening on ports
 app.listen(port, () => {

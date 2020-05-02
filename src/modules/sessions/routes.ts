@@ -1,7 +1,6 @@
-import express, { Request, Response, response } from 'express'
+import express, { Response, Request } from 'express'
 
-import { db } from '../database/mongo'
-import UserOperations from './controller'
+import SessionOperations from './controller'
 
 // loading interfaces
 import { ControllerResponse } from './interface'
@@ -9,7 +8,7 @@ import { ControllerResponse } from './interface'
 const router = express.Router()
 
 router.post('/create', async ({ body }, res: Response) => {
-  const response = (await UserOperations.createNewUser(body)) as ControllerResponse
+  const response: ControllerResponse = await SessionOperations.createNewSession(body, res.locals.client)
 
   res.status(response.code).json({
     error: response.error,
@@ -18,8 +17,8 @@ router.post('/create', async ({ body }, res: Response) => {
   })
 })
 
-router.post('/login', async ({ body }, res: Response) => {
-  const response = (await UserOperations.login(body)) as ControllerResponse
+router.delete('/delete', async ({ body }, res: Response) => {
+  const response: ControllerResponse = await SessionOperations.deleteSession(body, res.locals.client)
 
   res.status(response.code).json({
     error: response.error,
