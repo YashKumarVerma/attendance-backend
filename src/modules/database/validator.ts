@@ -36,7 +36,6 @@ class CollectionSeeder {
       logger.info('Collection `users` Processed')
     } catch (err) {
       logger.error('Error while processing users schema')
-      console.log(err)
     }
   }
 }

@@ -1,3 +1,5 @@
+import { ObjectId } from 'bson'
+
 export interface loginParams {
   readonly username: string
   readonly password: string
@@ -5,6 +7,7 @@ export interface loginParams {
 
 // local interface (with __xx) to define createUser requirements
 interface signupRequirement {
+  _id?: ObjectId
   readonly username: string
   readonly fullName: string
   readonly email: string
