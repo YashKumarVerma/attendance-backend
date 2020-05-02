@@ -39,9 +39,9 @@ class RESPONSE {
 
   static NOT_FOUND() {
     return {
-      code: 422,
+      code: 404,
       error: true,
-      message: 'Action on a non existing resource was done',
+      message: 'Action on a non existing resource was done, therefore not found',
       payload: null,
     }
   }
