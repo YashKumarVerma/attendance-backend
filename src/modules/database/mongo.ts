@@ -23,5 +23,4 @@ function get() {
 function close() {
   mongodb.close()
 }
-
 export { connect, get, close, mongodb as db }

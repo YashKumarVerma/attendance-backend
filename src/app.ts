@@ -11,8 +11,13 @@ import cors from 'cors'
 import authMiddleWare from './modules/auth/middleware'
 
 import { connect } from './modules/database/mongo'
+import Seed from './modules/database/validator'
 
-connect(() => logger.info('Database Connected'))
+// seed collections with validations
+connect(async () => {
+  logger.info('Database Connencted')
+  await Seed.userCollection()
+})
 
 // create instance of express
 const app = express()
