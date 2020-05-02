@@ -58,7 +58,26 @@ class EventOperations {
         return RESPONSES.NOT_FOUND()
       }
     } catch (err) {
-      logger.error('Error Creating Event')
+      logger.error('Error Deleting Event')
+      return RESPONSES.ERROR(err)
+    }
+  }
+
+  static async getEventDetails(eventSlug: string, client: clientTokenData): Promise<ControllerResponse> {
+    try {
+      if (!eventSlug) {
+        return RESPONSES.INCOMPLETE_REQUEST()
+      }
+
+      const eventDetails = await db.collection('events').findOne({ slug: eventSlug, admin: client.username })
+      if (!eventDetails) {
+        return RESPONSES.NOT_FOUND()
+      }
+
+      logger.info(`Event details for "${eventSlug}" fetched`)
+      return RESPONSES.SUCCESS_OPERATION(eventDetails)
+    } catch (err) {
+      logger.info('Fetching details for event')
       return RESPONSES.ERROR(err)
     }
   }
