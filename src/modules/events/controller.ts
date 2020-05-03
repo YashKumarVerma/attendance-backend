@@ -17,7 +17,8 @@ class EventOperations {
    */
   static async createNewEvent({ event }: createObject, client: clientTokenData): Promise<ControllerResponse> {
     try {
-      if (!event) {
+      if (!event || !event.slug || !event.eventName || !event.description) {
+        console.log(event)
         return RESPONSES.INCOMPLETE_REQUEST()
       }
 
@@ -71,6 +72,11 @@ class EventOperations {
       }
 
       const eventDetails: eventDetails = await db.collection('events').findOne({ slug: eventSlug, admin: client.username })
+
+      if (!eventDetails) {
+        return RESPONSES.NOT_FOUND()
+      }
+
       let sessionDetails: Array<sessionDetails> = []
       for (let i = 0; i < eventDetails.sessions.length; i += 1) {
         const detail = await db.collection('sessions').findOne({ slug: eventDetails.sessions[i], admin: client.username })
@@ -78,12 +84,35 @@ class EventOperations {
       }
       eventDetails.sessionDetails = sessionDetails
 
-      if (!eventDetails) {
-        return RESPONSES.NOT_FOUND()
-      }
-
       logger.info(`Event details for "${eventSlug}" fetched`)
       return RESPONSES.SUCCESS_OPERATION(eventDetails)
+    } catch (err) {
+      logger.info('Fetching details for event')
+      return RESPONSES.ERROR(err)
+    }
+  }
+
+  static async getAllEventsOfUser(client: clientTokenData): Promise<ControllerResponse> {
+    try {
+      const cursor = await db.collection('events').find({ admin: client.username })
+      const eventsArray: Array<eventDetails> = await cursor.toArray()
+
+      if (!eventsArray) {
+        return RESPONSES.SUCCESS_OPERATION([])
+      }
+
+      for (let i = 0; i < eventsArray.length; i += 1) {
+        let sessionDetails: Array<sessionDetails> = []
+        for (let i = 0; i < eventsArray[i].sessions.length; i += 1) {
+          const detail = await db.collection('sessions').findOne({ slug: eventsArray[i].sessions[i], admin: client.username })
+          sessionDetails.push(detail)
+        }
+        eventsArray[i].sessionDetails = sessionDetails
+
+        logger.info(`Event details for "${eventsArray[i].slug}" fetched`)
+      }
+
+      return RESPONSES.SUCCESS_OPERATION(eventsArray)
     } catch (err) {
       logger.info('Fetching details for event')
       return RESPONSES.ERROR(err)
