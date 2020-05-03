@@ -6,7 +6,7 @@ interface createObjectRequirement {
   admin?: string
   sessions?: string[]
   participants?: string[]
-  readonly name: string
+  readonly eventName: string
   readonly slug: string
   readonly description: string
 }
