@@ -46,12 +46,21 @@ class RESPONSE {
     }
   }
 
+  static DUPLICATE() {
+    return {
+      code: 409,
+      error: true,
+      message: 'Expected unique value, got duplicate',
+      payload: null,
+    }
+  }
+
   static ERROR(errorObject: any) {
     // check if error type is a database error
     if (errorObject.name == 'MongoError') {
       if (errorObject.code == 11000) {
         return {
-          code: 400,
+          code: 409,
           error: true,
           message: 'Expected unique value, got duplicate',
           payload: null,
