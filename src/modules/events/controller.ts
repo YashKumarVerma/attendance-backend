@@ -18,7 +18,7 @@ class EventOperations {
   static async createNewEvent({ event }: createObject, client: clientTokenData): Promise<ControllerResponse> {
     try {
       if (!event || !event.slug || !event.eventName || !event.description) {
-        console.log(event)
+        // console.log(event)
         return RESPONSES.INCOMPLETE_REQUEST()
       }
 
@@ -28,6 +28,8 @@ class EventOperations {
 
       const dbOperation = await db.collection('events').insertOne(event)
       logger.info('New Event Created Successfully')
+      dbOperation.ops[0].sessionDetails = []
+      console.log('Created New Event, returning ', dbOperation.ops[0])
       return RESPONSES.SUCCESS_OPERATION(dbOperation.ops)
 
       //   catching errors
@@ -57,6 +59,8 @@ class EventOperations {
 
         // else, return 422 error
       } else {
+        logger.info('Error deleting event')
+        console.log(dbOperation.result)
         return RESPONSES.NOT_FOUND()
       }
     } catch (err) {
@@ -102,17 +106,10 @@ class EventOperations {
       }
 
       for (let i = 0; i < eventsArray.length; i += 1) {
-        let sessionDetails: Array<sessionDetails> = []
-        for (let j = 0; j < eventsArray[j].sessions.length; j += 1) {
-          const detail = await db.collection('sessions').findOne({ slug: eventsArray[i].sessions[j], admin: client.username })
-          if (detail != null) {
-            sessionDetails.push(detail)
-          }
-        }
-        eventsArray[i].sessionDetails = sessionDetails
+        //   now we eventsArray[i] means individual event
+        const cursor = await db.collection('sessions').find({ parent: eventsArray[i].slug, admin: client.username })
+        eventsArray[i].sessionDetails = await cursor.toArray()
       }
-      console.log(eventsArray)
-
       return RESPONSES.SUCCESS_OPERATION(eventsArray)
     } catch (err) {
       logger.info('Fetching details for event')
