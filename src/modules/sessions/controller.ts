@@ -15,6 +15,11 @@ class SessionOperations {
       session.createdAt = new Date().getTime()
 
       const sessionCreation = await db.collection('sessions').insertOne(session)
+
+      if (sessionCreation.result.n !== 1) {
+        return RESPONSES.DUPLICATE()
+      }
+
       const eventPush = await db.collection('events').updateOne(
         { slug: session.parent, admin: client.username },
         {
@@ -23,7 +28,7 @@ class SessionOperations {
       )
       if (eventPush.result.nModified == 1) {
         logger.info('New Session Created Successfully')
-        return RESPONSES.SUCCESS_OPERATION(null)
+        return RESPONSES.SUCCESS_OPERATION(sessionCreation.ops)
       } else {
         logger.error('Count not create Session due to event push error')
         return RESPONSES.NOT_FOUND()
@@ -49,7 +54,7 @@ class SessionOperations {
             $pull: { sessions: session.slug },
           },
         )
-        console.log(eventPullOperation)
+        // console.log(eventPullOperation)
 
         return RESPONSES.SUCCESS_OPERATION()
       } else {
