@@ -103,14 +103,15 @@ class EventOperations {
 
       for (let i = 0; i < eventsArray.length; i += 1) {
         let sessionDetails: Array<sessionDetails> = []
-        for (let i = 0; i < eventsArray[i].sessions.length; i += 1) {
-          const detail = await db.collection('sessions').findOne({ slug: eventsArray[i].sessions[i], admin: client.username })
-          sessionDetails.push(detail)
+        for (let j = 0; j < eventsArray[j].sessions.length; j += 1) {
+          const detail = await db.collection('sessions').findOne({ slug: eventsArray[i].sessions[j], admin: client.username })
+          if (detail != null) {
+            sessionDetails.push(detail)
+          }
         }
         eventsArray[i].sessionDetails = sessionDetails
-
-        logger.info(`Event details for "${eventsArray[i].slug}" fetched`)
       }
+      console.log(eventsArray)
 
       return RESPONSES.SUCCESS_OPERATION(eventsArray)
     } catch (err) {
