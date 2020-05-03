@@ -28,7 +28,7 @@ class EventOperations {
 
       const dbOperation = await db.collection('events').insertOne(event)
       logger.info('New Event Created Successfully')
-      return RESPONSES.SUCCESS_OPERATION(null)
+      return RESPONSES.SUCCESS_OPERATION(dbOperation.ops)
 
       //   catching errors
     } catch (err) {
