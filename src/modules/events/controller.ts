@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-unused-vars: 0 */
 import logger from '../logger/winston'
 import { db } from '../database/mongo'
 import { createObject, ControllerResponse, clientTokenData, eventDetails } from './interface'
@@ -18,7 +19,6 @@ class EventOperations {
   static async createNewEvent({ event }: createObject, client: clientTokenData): Promise<ControllerResponse> {
     try {
       if (!event || !event.slug || !event.eventName || !event.description) {
-        // console.log(event)
         return RESPONSES.INCOMPLETE_REQUEST()
       }
 
@@ -29,7 +29,6 @@ class EventOperations {
       const dbOperation = await db.collection('events').insertOne(event)
       logger.info('New Event Created Successfully')
       dbOperation.ops[0].sessionDetails = []
-      console.log('Created New Event, returning ', dbOperation.ops[0])
       return RESPONSES.SUCCESS_OPERATION(dbOperation.ops)
 
       //   catching errors
@@ -54,15 +53,13 @@ class EventOperations {
       const dbOperation = await db.collection('events').deleteOne({ slug: eventSlug, admin: client.username })
 
       //  if exactly one item is deleted, return success response
-      if (dbOperation.result.n == 1) {
+      if (dbOperation.result.n === 1) {
         return RESPONSES.SUCCESS_OPERATION()
 
         // else, return 422 error
-      } else {
-        logger.info('Error deleting event')
-        console.log(dbOperation.result)
-        return RESPONSES.NOT_FOUND()
       }
+      logger.info('Error deleting event')
+      return RESPONSES.NOT_FOUND()
     } catch (err) {
       logger.error('Error Deleting Event')
       return RESPONSES.ERROR(err)
@@ -75,21 +72,21 @@ class EventOperations {
         return RESPONSES.INCOMPLETE_REQUEST()
       }
 
-      const eventDetails: eventDetails = await db.collection('events').findOne({ slug: eventSlug, admin: client.username })
+      const eventDetailsObject: eventDetails = await db.collection('events').findOne({ slug: eventSlug, admin: client.username })
 
-      if (!eventDetails) {
+      if (!eventDetailsObject) {
         return RESPONSES.NOT_FOUND()
       }
 
-      let sessionDetails: Array<sessionDetails> = []
-      for (let i = 0; i < eventDetails.sessions.length; i += 1) {
-        const detail = await db.collection('sessions').findOne({ slug: eventDetails.sessions[i], admin: client.username })
-        sessionDetails.push(detail)
+      const sessionDetailsObject: Array<sessionDetails> = []
+      for (let i = 0; i < eventDetailsObject.sessions.length; i += 1) {
+        const detail = await db.collection('sessions').findOne({ slug: eventDetailsObject.sessions[i], admin: client.username })
+        sessionDetailsObject.push(detail)
       }
-      eventDetails.sessionDetails = sessionDetails
+      eventDetailsObject.sessionDetails = sessionDetailsObject
 
       logger.info(`Event details for "${eventSlug}" fetched`)
-      return RESPONSES.SUCCESS_OPERATION(eventDetails)
+      return RESPONSES.SUCCESS_OPERATION(eventDetailsObject)
     } catch (err) {
       logger.info('Fetching details for event')
       return RESPONSES.ERROR(err)
@@ -107,8 +104,8 @@ class EventOperations {
 
       for (let i = 0; i < eventsArray.length; i += 1) {
         //   now we eventsArray[i] means individual event
-        const cursor = await db.collection('sessions').find({ parent: eventsArray[i].slug, admin: client.username })
-        eventsArray[i].sessionDetails = await cursor.toArray()
+        const sessionCursor = await db.collection('sessions').find({ parent: eventsArray[i].slug, admin: client.username })
+        eventsArray[i].sessionDetails = await sessionCursor.toArray()
       }
       return RESPONSES.SUCCESS_OPERATION(eventsArray)
     } catch (err) {
