@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
-import logger from '../logger/winston'
 import jwt from 'jsonwebtoken'
+import logger from '../logger/winston'
 
-const authMiddleware = (req: any, res: any, next: any) => {
+const authMiddleware = (req: Request, res: Response, next: any): any => {
   // if headers dont exist
   if (!req.headers.authorization) {
     logger.warn('Request Without Token Denied')
@@ -36,6 +36,7 @@ const authMiddleware = (req: any, res: any, next: any) => {
   }
 
   res.locals.client = data
-  next()
+  return next()
 }
+
 export default authMiddleware
