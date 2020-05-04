@@ -26,13 +26,12 @@ class SessionOperations {
           $push: { sessions: session.slug },
         },
       )
-      if (eventPush.result.nModified == 1) {
+      if (eventPush.result.nModified === 1) {
         logger.info('New Session Created Successfully')
         return RESPONSES.SUCCESS_OPERATION(sessionCreation.ops)
-      } else {
-        logger.error('Count not create Session due to event push error')
-        return RESPONSES.NOT_FOUND()
       }
+      logger.error('Count not create Session due to event push error')
+      return RESPONSES.NOT_FOUND()
     } catch (err) {
       logger.error('Error Creating Session')
       return RESPONSES.ERROR(err)
@@ -47,8 +46,8 @@ class SessionOperations {
 
       const sessionDeletion = await db.collection('sessions').deleteOne({ slug: session.slug, admin: client.username })
 
-      if (sessionDeletion.result.n == 1) {
-        const eventPullOperation = await db.collection('events').updateOne(
+      if (sessionDeletion.result.n === 1) {
+        await db.collection('events').updateOne(
           { slug: session.parent, admin: client.username },
           {
             $pull: { sessions: session.slug },
@@ -57,9 +56,8 @@ class SessionOperations {
         // console.log(eventPullOperation)
 
         return RESPONSES.SUCCESS_OPERATION()
-      } else {
-        return RESPONSES.NOT_FOUND()
       }
+      return RESPONSES.NOT_FOUND()
     } catch (err) {
       logger.error('Error Deleting Session')
       return RESPONSES.ERROR(err)

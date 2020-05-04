@@ -1,4 +1,4 @@
-import express, { Response, Request } from 'express'
+import express, { Response } from 'express'
 
 import SessionOperations from './controller'
 
