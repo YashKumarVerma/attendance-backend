@@ -1,17 +1,22 @@
-require('dotenv').config()
-
 import express from 'express'
 
 import bodyParser from 'body-parser'
 
+import cors from 'cors'
 import logger from './modules/logger/winston'
 
-import cors from 'cors'
 
 import authMiddleWare from './modules/auth/middleware'
 
 import { connect } from './modules/database/mongo'
 import Seed from './modules/database/validator'
+
+// loading routes
+import userRoutes from './modules/user/routes'
+import eventRoutes from './modules/events/routes'
+import sessionRoutes from './modules/sessions/routes'
+
+require('dotenv').config()
 
 // seed collections with validations
 connect(async () => {
@@ -33,11 +38,6 @@ app.use(
 )
 app.use(bodyParser.json())
 app.use(cors())
-
-// loading routes
-import userRoutes from './modules/user/routes'
-import eventRoutes from './modules/events/routes'
-import sessionRoutes from './modules/sessions/routes'
 
 // user interaction allowed without token headers
 app.use('/user', userRoutes)
