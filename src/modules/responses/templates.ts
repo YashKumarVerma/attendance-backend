@@ -1,5 +1,3 @@
-import { response } from 'express'
-
 class RESPONSE {
   static INCOMPLETE_REQUEST() {
     return {
@@ -24,7 +22,7 @@ class RESPONSE {
       code: 200,
       error: false,
       message: 'The requested operation completed successfully',
-      payload: payload,
+      payload,
     }
   }
 
@@ -57,8 +55,8 @@ class RESPONSE {
 
   static ERROR(errorObject: any) {
     // check if error type is a database error
-    if (errorObject.name == 'MongoError') {
-      if (errorObject.code == 11000) {
+    if (errorObject.name === 'MongoError') {
+      if (errorObject.code === 11000) {
         return {
           code: 409,
           error: true,
@@ -66,8 +64,6 @@ class RESPONSE {
           payload: null,
         }
       }
-    } else {
-      console.log(errorObject)
     }
 
     // base case
