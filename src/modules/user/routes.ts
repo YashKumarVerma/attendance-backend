@@ -1,6 +1,5 @@
-import express, { Request, Response, response } from 'express'
+import express, { Response } from 'express'
 
-import { db } from '../database/mongo'
 import UserOperations from './controller'
 
 import { ControllerResponse } from './interface'

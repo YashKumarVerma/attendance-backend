@@ -1,5 +1,5 @@
-import logger from '../logger/winston'
 import jwt from 'jsonwebtoken'
+import logger from '../logger/winston'
 import { db } from '../database/mongo'
 import { loginParams, signupObject, ControllerResponse } from './interface'
 import RESPONSES from '../responses/templates'
@@ -11,13 +11,9 @@ class UserOperations {
         return RESPONSES.INCOMPLETE_REQUEST()
       }
 
-      const dbOperation = await db.collection('users').insertOne(user)
+      await db.collection('users').insertOne(user)
       logger.info('New User Created Successfully')
       return RESPONSES.SUCCESS_OPERATION(null)
-      //   const cursor = await db.collection('users').find({}).toArray()
-      //   let response = RESPONSES.SUCCESS_OPERATION
-      //   response.payload = cursor
-
       //   catching errors
     } catch (err) {
       logger.error('Error Creating User')
