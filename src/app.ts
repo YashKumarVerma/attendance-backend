@@ -5,7 +5,6 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import logger from './modules/logger/winston'
 
-
 import authMiddleWare from './modules/auth/middleware'
 
 import { connect } from './modules/database/mongo'
@@ -28,7 +27,7 @@ connect(async () => {
 const app = express()
 
 // define port to start server on
-const port = process.env.PORT || 3000
+const port = process.env.port || 3000
 
 // parse valid requests only
 app.use(

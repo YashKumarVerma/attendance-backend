@@ -2,7 +2,7 @@
   "name": "attendance-application-backend",
   "version": "1.0.0",
   "description": "backend of the attendance application",
-  "main": "app.js",
+  "main": "dist/app.js",
   "scripts": {
     "lint": "eslint ./src/**/*.ts --fix",
     "build": "tsc",
@@ -41,10 +41,10 @@
     "eslint-plugin-prettier": "^3.1.3",
     "mocha": "^7.1.1",
     "nodemon": "^2.0.3",
-    "prettier": "^2.0.4",
-    "typescript": "^3.8.3"
+    "prettier": "^2.0.4"
   },
   "dependencies": {
+    "typescript": "^3.8.3",
     "body-parser": "^1.19.0",
     "bson": "^4.0.4",
     "cors": "^2.8.5",

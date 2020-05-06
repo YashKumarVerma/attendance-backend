@@ -26,7 +26,7 @@ const authMiddleware = (req: Request, res: Response, next: any): any => {
 
   let data
   try {
-    data = jwt.verify(auth[1], String(process.env.SECRETKEY))
+    data = jwt.verify(auth[1], String(process.env.secretkey))
   } catch (e) {
     return res.status(403).json({
       error: true,

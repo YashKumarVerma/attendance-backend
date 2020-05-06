@@ -3,12 +3,7 @@ const winston = require('winston')
 
 const winstonLogger = winston.createLogger({
   level: 'info',
-  format: winston.format.combine(
-    winston.format.simple(),
-    winston.format.colorize(),
-    winston.format.prettyPrint(),
-    winston.format.errors({ stack: true }),
-  ),
+  format: winston.format.combine(winston.format.simple(), winston.format.colorize(), winston.format.prettyPrint(), winston.format.errors({ stack: true })),
   //   defaultMeta: { service: 'logging' },
   transports: [
     // new winston.transports.Console(),
@@ -42,7 +37,7 @@ const winstonLogger = winston.createLogger({
   ],
 })
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.node_env !== 'production') {
   winstonLogger.add(
     new winston.transports.Console({
       format: winston.format.simple(),

@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb'
 import logger from '../logger/winston'
 
-const connectionString: string = process.env.CONNECTION_STRING || 'mongodb://127.0.0.1:27017/'
+const connectionString: string = process.env.connection_string || 'mongodb://127.0.0.1:27017/'
 
 // eslint-disable-next-line
 let mongodb: any

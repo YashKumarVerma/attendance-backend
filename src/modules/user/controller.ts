@@ -31,7 +31,7 @@ class UserOperations {
       if (!cursor) {
         return RESPONSES.UNAUTHORIZED()
       }
-      const token = jwt.sign({ username: cursor.username, email: cursor.email }, String(process.env.SECRETKEY), {
+      const token = jwt.sign({ username: cursor.username, email: cursor.email }, String(process.env.secretkey), {
         expiresIn: '1d',
       })
       return RESPONSES.SUCCESS_OPERATION(token)
