@@ -1,5 +1,6 @@
 import express, { Response } from 'express'
 
+// import cors from 'cors'
 import UserOperations from './controller'
 
 import { ControllerResponse } from './interface'

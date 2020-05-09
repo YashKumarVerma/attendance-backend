@@ -37,7 +37,7 @@ app.use(
 )
 app.use(bodyParser.json())
 
-app.options('*', cors())
+// app.options('*', cors())
 app.use(
   cors({
     origin: '*',
