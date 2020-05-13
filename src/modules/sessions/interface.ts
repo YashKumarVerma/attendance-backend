@@ -5,13 +5,12 @@ interface createObjectRequirement {
   admin: string
   participants: string[]
   createdAt: number
-  readonly startAt: number
-  readonly endAt: number
-  readonly overtimeAllowed: boolean
   readonly parent: string
-  readonly name: string
   readonly slug: string
-  readonly description: string
+  readonly sessionName: string
+  readonly endTime: number
+  readonly startTime: number
+  readonly overtimePermission: boolean
 }
 
 export interface createObject {
