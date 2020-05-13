@@ -20,3 +20,5 @@ after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker build -t yashkumarverma/attendance-backend .
   - docker push yashkumarverma/attendance-backend
+  - npm i -g surge
+  - surge --project ./coverage/lcov-report --domain ykv-attendance-cov.surge.sh
