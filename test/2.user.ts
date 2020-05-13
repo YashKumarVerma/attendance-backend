@@ -1,35 +1,9 @@
 /* eslint-disable no-unused-expressions */
 import fetch from 'node-fetch'
 import { expect } from 'chai'
-import { describe, before, it } from 'mocha'
-import serverInstance from '../src/app'
-
-import logger from '../src/modules/logger/winston'
-import Seed from '../src/modules/database/validator'
-import { db, connect } from '../src/modules/database/mongo'
+import { describe, it } from 'mocha'
 
 describe(' => Testing /user route', () => {
-  before((done) => {
-    try {
-      serverInstance.listen(3001)
-      setTimeout(() => {
-        connect(async () => {
-          logger.info('Connecting to database to clear old records')
-          Seed()
-          db.collection('users').deleteMany({})
-          logger.info('Cleared collection : users')
-          db.collection('events').deleteMany({})
-          logger.info('Cleared collection : events')
-          db.collection('sessions').deleteMany({})
-          logger.info('Cleared collection : sessions')
-          done()
-        })
-      }, 3000)
-    } catch (error) {
-      done(error)
-    }
-  })
-
   const url = 'http://localhost:3000/user'
 
   //   testing /create
@@ -41,7 +15,6 @@ describe(' => Testing /user route', () => {
       .then((res) => res.json())
       .then((resp) => {
         expect(resp.error).to.be.true
-        console.log(resp)
         done()
       })
       .catch((err) => {
@@ -127,7 +100,6 @@ describe(' => Testing /user route', () => {
       .then((res) => res.json())
       .then((resp) => {
         expect(resp.error).to.be.true
-        console.log(resp)
         done()
       })
       .catch((err) => {

@@ -8,8 +8,8 @@
     "build": "tsc",
     "server": "nodemon",
     "start": "node ./dist/app.js",
-    "test": "./node_modules/mocha/bin/mocha --require ts-node/register --timeout 5000 --exit ./test/*.ts",
-    "coverage": "nyc --reporter=lcov ./node_modules/mocha/bin/mocha --require ts-node/register --timeout 5000 --exit ./test/*.ts",
+    "test": "./node_modules/mocha/bin/mocha --sort --require ts-node/register --timeout 5000 --exit ./test/*.ts",
+    "coverage": "nyc --reporter=lcov ./node_modules/mocha/bin/mocha --sort --require ts-node/register --timeout 5000 --exit ./test/*.ts",
     "codecov": "codecov"
   },
   "repository": {
