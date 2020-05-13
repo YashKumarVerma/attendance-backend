@@ -1,6 +1,7 @@
 # Attendance Application : Backend
 
 [![Build Status](https://travis-ci.com/YashKumarVerma/attendance-backend.svg?token=bdYdpM7ki4qrmdCwJmGf&branch=master)](https://travis-ci.com/YashKumarVerma/attendance-backend)
+[![codecov](https://codecov.io/gh/YashKumarVerma/attendance-backend/branch/master/graph/badge.svg)](https://codecov.io/gh/YashKumarVerma/attendance-backend)
 ![GitHub](https://img.shields.io/github/license/yashkumarverma/attendance-backend)
 ![GitHub top language](https://img.shields.io/github/languages/top/yashkumarverma/attendance-backend)
 ![Dependencies](https://img.shields.io/david/yashkumarverma/attendance-backend)
