@@ -6,15 +6,6 @@ import { describe, it } from 'mocha'
 describe(' => Testing /session route', () => {
   const url = 'http://localhost:3000/'
 
-  // variables to simulate user session
-  const user = {
-    first: {
-      username: 'yashkumarverma',
-      password: '123456',
-      token: '',
-    },
-  }
-
   //   check for headers
   it('should return 400 for making request without Authorization header ', (done) => {
     fetch(`${url}user/login`, {
