@@ -49,6 +49,7 @@ app.use('/event', eventRoutes)
 app.use('/session', sessionRoutes)
 
 // start listening on ports
+export default app
 app.listen(port, () => {
   logger.info(`Express server started at port: ${port}`)
 })

@@ -28,3 +28,7 @@ deployent
 
 # test results
 .nyc_output
+coverage.lcov
+nohup.out
+out.txt
+*.info
