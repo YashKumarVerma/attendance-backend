@@ -12,6 +12,7 @@ install:
 script:
   - npm run lint
   - npm run build
+  - npm run coverage
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin

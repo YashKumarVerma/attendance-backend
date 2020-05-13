@@ -38,14 +38,7 @@ app.use(
 app.use(bodyParser.json())
 
 // app.options('*', cors())
-app.use(
-  cors({
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    preflightContinue: true,
-    optionsSuccessStatus: 204,
-  }),
-)
+app.use(cors())
 
 // user interaction allowed without token headers
 app.use('/user', userRoutes)

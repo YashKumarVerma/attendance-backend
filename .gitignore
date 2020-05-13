@@ -17,6 +17,14 @@ Thumbs.db
 # Ignore built ts files
 dist/**/*
 
+# now deploy files
 .now
+
+# app generated logs
 *.log
+
+# azure specific files
 deployent
+
+# test results
+.nyc_output
