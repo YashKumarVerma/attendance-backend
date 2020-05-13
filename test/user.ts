@@ -10,20 +10,24 @@ import { db, connect } from '../src/modules/database/mongo'
 
 describe(' => Testing /user route', () => {
   before((done) => {
-    serverInstance.listen(3001)
-    setTimeout(() => {
-      connect(async () => {
-        logger.info('Connecting to database to clear old records')
-        await Seed()
-        await db.collection('users').deleteMany({})
-        logger.info('Cleared collection : users')
-        await db.collection('events').deleteMany({})
-        logger.info('Cleared collection : events')
-        await db.collection('sessions').deleteMany({})
-        logger.info('Cleared collection : sessions')
-        done()
-      })
-    }, 2000)
+    try {
+      serverInstance.listen(3001)
+      setTimeout(() => {
+        connect(async () => {
+          logger.info('Connecting to database to clear old records')
+          Seed()
+          db.collection('users').deleteMany({})
+          logger.info('Cleared collection : users')
+          db.collection('events').deleteMany({})
+          logger.info('Cleared collection : events')
+          db.collection('sessions').deleteMany({})
+          logger.info('Cleared collection : sessions')
+          done()
+        })
+      }, 3000)
+    } catch (error) {
+      done(error)
+    }
   })
 
   const url = 'http://localhost:3000/user'
