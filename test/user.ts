@@ -100,4 +100,44 @@ describe(' => Testing /user route', () => {
         done(err)
       })
   })
+
+  it('should successfully login and return a jwt token', (done) => {
+    fetch(`${url}/login`, {
+      method: 'post',
+      body: JSON.stringify({
+        username: 'yashkumarverma',
+        password: '123456',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => res.json())
+      .then((resp) => {
+        expect(resp).to.have.all.keys('error', 'message', 'payload')
+        expect(resp.error).to.be.false
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  it('should not login ', (done) => {
+    fetch(`${url}/login`, {
+      method: 'post',
+      body: JSON.stringify({
+        username: 'yashkumarverma',
+        password: 'wront password',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => res.json())
+      .then((resp) => {
+        expect(resp).to.have.all.keys('error', 'message', 'payload')
+        expect(resp.error).to.be.true
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
 })
