@@ -326,6 +326,27 @@ describe(' => Testing /session route', () => {
       })
   })
 
+  it('should not create session with same proper data again', (done) => {
+    fetch(`${url}session/create`, {
+      method: 'post',
+      body: JSON.stringify({ session: session.first }),
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.first.token}` },
+    })
+      .then((res) => {
+        // incomplete error status code
+        expect(res.status).to.not.equal(200)
+        return res.json()
+      })
+      .then((resp) => {
+        expect(resp).to.have.all.keys('error', 'message', 'payload')
+        expect(resp.error).to.be.true
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
   it('should not create session when parent of another admin', (done) => {
     fetch(`${url}session/create`, {
       method: 'post',

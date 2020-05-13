@@ -18,8 +18,4 @@ function connect(callback: any) {
   })
 }
 
-function close() {
-  mongodb.close()
-}
-
-export { connect, close, mongodb as db }
+export { connect, mongodb as db }

@@ -8,15 +8,6 @@ class RESPONSE {
     }
   }
 
-  static DEFAULT_CATCH() {
-    return {
-      code: 500,
-      error: true,
-      message: 'There was an internal server error',
-      payload: null,
-    }
-  }
-
   static SUCCESS_OPERATION(payload?: any) {
     return {
       code: 200,
