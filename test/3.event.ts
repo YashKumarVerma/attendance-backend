@@ -2,6 +2,7 @@
 import fetch from 'node-fetch'
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
+import { toASCII } from 'punycode'
 
 describe(' => Testing /events route', () => {
   const url = 'http://localhost:3000/'
@@ -34,6 +35,13 @@ describe(' => Testing /events route', () => {
       participants: [],
       sessions: [],
       description: 'something awesome about the hackathon',
+    },
+    third: {
+      eventName: 'Third event',
+      slug: 'third-event',
+      participants: [],
+      session: [],
+      description: 'a third event',
     },
   }
 
@@ -223,6 +231,27 @@ describe(' => Testing /events route', () => {
       })
   })
 
+  it('should successfully create third event if all data provided', (done) => {
+    fetch(`${url}event/create`, {
+      method: 'post',
+      body: JSON.stringify({ event: event.third }),
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.first.token}` },
+    })
+      .then((res) => {
+        // incomplete error status code
+        expect(res.status).to.equal(200)
+        return res.json()
+      })
+      .then((resp) => {
+        expect(resp).to.have.all.keys('error', 'message', 'payload')
+        expect(resp.error).to.be.false
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
   it('should successfully return first event data for first user', (done) => {
     fetch(`${url}event/${event.first.slug}`, {
       method: 'get',
@@ -302,6 +331,88 @@ describe(' => Testing /events route', () => {
       .then((resp) => {
         expect(resp).to.have.all.keys('error', 'message', 'payload')
         expect(resp.error).to.be.true
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  it('should give details of event one and event three for first user', (done) => {
+    fetch(`${url}event/user/all`, {
+      method: 'get',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.first.token}` },
+    })
+      .then((res) => {
+        // incomplete error status code
+        expect(res.status).to.equal(200)
+        return res.json()
+      })
+      .then((resp) => {
+        expect(resp).to.have.all.keys('error', 'message', 'payload')
+        expect(resp.error).to.be.false
+        expect(resp.payload.length).to.equal(2)
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  it('should give details of event two for second user', (done) => {
+    fetch(`${url}event/user/all`, {
+      method: 'get',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.second.token}` },
+    })
+      .then((res) => {
+        // incomplete error status code
+        expect(res.status).to.equal(200)
+        return res.json()
+      })
+      .then((resp) => {
+        expect(resp).to.have.all.keys('error', 'message', 'payload')
+        expect(resp.error).to.be.false
+        expect(resp.payload.length).to.equal(1)
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  it('should not be possible for second user to delete first event', (done) => {
+    fetch(`${url}event/${event.first.slug}`, {
+      method: 'delete',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.second.token}` },
+    })
+      .then((res) => {
+        // incomplete error status code
+        expect(res.status).to.equal(404)
+        return res.json()
+      })
+      .then((resp) => {
+        expect(resp).to.have.all.keys('error', 'message', 'payload')
+        expect(resp.error).to.be.true
+        done()
+      })
+      .catch((err) => {
+        done(err)
+      })
+  })
+
+  it('should be possible for first user to delete first event', (done) => {
+    fetch(`${url}event/${event.first.slug}`, {
+      method: 'delete',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.first.token}` },
+    })
+      .then((res) => {
+        // incomplete error status code
+        expect(res.status).to.equal(200)
+        return res.json()
+      })
+      .then((resp) => {
+        expect(resp).to.have.all.keys('error', 'message')
+        expect(resp.error).to.be.false
         done()
       })
       .catch((err) => {
