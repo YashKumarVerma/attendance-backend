@@ -6,7 +6,15 @@ import RESPONSES from '../responses/templates'
 class SessionOperations {
   static async createNewSession({ session }: createObject, client: clientTokenData): Promise<ControllerResponse> {
     try {
-      if (!session) {
+      if (
+        !session ||
+        !session.startTime ||
+        !session.endTime ||
+        !session.sessionName ||
+        session.overtimePermission === undefined ||
+        !session.parent ||
+        !session.slug
+      ) {
         return RESPONSES.INCOMPLETE_REQUEST()
       }
 
