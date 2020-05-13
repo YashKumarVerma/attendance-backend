@@ -32,3 +32,4 @@ coverage.lcov
 nohup.out
 out.txt
 *.info
+coverage
