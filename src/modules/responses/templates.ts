@@ -53,6 +53,24 @@ class RESPONSE {
     }
   }
 
+  static BAD_REQUEST() {
+    return {
+      code: 400,
+      error: true,
+      message: 'Request was received in bad format',
+      payload: null,
+    }
+  }
+
+  static FORBIDDEN() {
+    return {
+      code: 403,
+      error: true,
+      message: 'Request forbidden',
+      payload: null,
+    }
+  }
+
   static ERROR(errorObject: any) {
     // check if error type is a database error
     if (errorObject.name === 'MongoError') {
