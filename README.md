@@ -21,3 +21,7 @@ $ npm run server
 ## Docs
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/10043948/Szf52ouG)
+
+## Plan
+
+![Sample Code](../master/docs/peer-reveiewed-attendance.jpeg)
