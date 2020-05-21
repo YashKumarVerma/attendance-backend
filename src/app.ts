@@ -26,9 +26,6 @@ connect(async () => {
 // create instance of express
 const app = express()
 
-// define port to start server on
-const port = process.env.port || 3000
-
 // parse valid requests only
 app.use(
   bodyParser.urlencoded({
@@ -50,6 +47,3 @@ app.use('/session', sessionRoutes)
 
 // start listening on ports
 export default app
-app.listen(port, () => {
-  logger.info(`Express server started at port: ${port}`)
-})

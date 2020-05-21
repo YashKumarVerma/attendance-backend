@@ -9,7 +9,7 @@ import { db, connect } from '../src/modules/database/mongo'
 describe(' => Testing / route', () => {
   before((done) => {
     try {
-      serverInstance.listen(3001)
+      serverInstance.listen(3000)
       setTimeout(() => {
         connect(async () => {
           logger.info('Connecting to database to clear old records')

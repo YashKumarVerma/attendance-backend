@@ -7,7 +7,7 @@
     "lint": "eslint ./src/**/*.ts --fix",
     "build": "tsc",
     "server": "nodemon",
-    "start": "node ./dist/app.js",
+    "start": "node ./dist/server.js",
     "test": "./node_modules/mocha/bin/mocha --sort --require ts-node/register --timeout 5000 --exit ./test/*.ts",
     "coverage": "nyc --reporter=lcov ./node_modules/mocha/bin/mocha --sort --require ts-node/register --timeout 5000 --exit ./test/*.ts",
     "codecov": "codecov"
@@ -39,6 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
     "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "codecov": "^3.6.5",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
