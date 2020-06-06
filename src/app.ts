@@ -14,6 +14,7 @@ import Seed from './modules/database/validator'
 import userRoutes from './modules/user/routes'
 import eventRoutes from './modules/events/routes'
 import sessionRoutes from './modules/sessions/routes'
+import externalRoutes from './modules/externals/routes'
 
 require('dotenv').config()
 
@@ -38,11 +39,13 @@ app.use(bodyParser.json())
 app.use(cors())
 
 // user interaction allowed without token headers
+app.use('/externals', externalRoutes)
 app.use('/user', userRoutes)
-
 // all routes next to this will require authentication
-app.use('/', authMiddleWare)
+app.use('/event', authMiddleWare)
 app.use('/event', eventRoutes)
+
+app.use('/session', authMiddleWare)
 app.use('/session', sessionRoutes)
 
 // start listening on ports

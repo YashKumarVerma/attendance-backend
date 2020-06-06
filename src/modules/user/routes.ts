@@ -1,6 +1,5 @@
 import express, { Response } from 'express'
 
-// import cors from 'cors'
 import UserOperations from './controller'
 
 import { ControllerResponse } from './interface'
@@ -8,7 +7,7 @@ import { ControllerResponse } from './interface'
 const router = express.Router()
 
 router.post('/create', async ({ body }, res: Response) => {
-  const response = (await UserOperations.createNewUser(body)) as ControllerResponse
+  const response: ControllerResponse = await UserOperations.createNewUser(body)
 
   res.status(response.code).json({
     error: response.error,
@@ -18,7 +17,7 @@ router.post('/create', async ({ body }, res: Response) => {
 })
 
 router.post('/login', async ({ body }, res: Response) => {
-  const response = (await UserOperations.login(body)) as ControllerResponse
+  const response: ControllerResponse = await UserOperations.login(body)
 
   res.status(response.code).json({
     error: response.error,
