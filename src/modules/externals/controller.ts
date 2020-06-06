@@ -23,7 +23,7 @@ class ExternalOperations {
 
   static async markAttendance(body: any): Promise<ControllerResponse> {
     try {
-      if (!body.registrationNumber || !body.slug || !body.slug) {
+      if (!body.registrationNumber || !body.slug || !body.name) {
         return RESPONSES.INCOMPLETE_REQUEST()
       }
 
@@ -46,6 +46,7 @@ class ExternalOperations {
           $push: {
             participants: {
               regNo: body.registrationNumber,
+              name: body.name,
               late,
             },
           },
