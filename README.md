@@ -23,7 +23,3 @@ $ npm run server
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/10043948/Szf52ouG)
 
 Instanbul Coverage Reports : [ykv-attendance-cov.surge.sh/](http://ykv-attendance-cov.surge.sh/)
-
-## Plan
-
-![Sample Code](../master/docs/peer-reveiewed-attendance.jpeg)
