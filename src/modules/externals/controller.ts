@@ -34,10 +34,10 @@ class ExternalOperations {
       }
 
       //   check time
-      let late = false
+      let islate = false
       const currentTime = new Date().getTime()
       if (cursor.endTime < currentTime) {
-        late = true
+        islate = true
       }
 
       await db.collection('sessions').updateOne(
@@ -47,7 +47,7 @@ class ExternalOperations {
             participants: {
               regNo: body.registrationNumber,
               name: body.name,
-              late,
+              late: islate,
             },
           },
         },
@@ -57,8 +57,6 @@ class ExternalOperations {
 
       //   catching errors
     } catch (err) {
-      logger.error('Error LoadingP Page In')
-      console.log(err.message)
       return RESPONSES.ERROR(err)
     }
   }
